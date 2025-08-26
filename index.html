@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,9 +106,9 @@
         <h1>Lo Pan Bagua Feng Shui Map</h1>
 
         <div class="compass-info">
-            <p class="loading" id="status">Initializing compass...</p>
-            <p><strong>Compass Direction:</strong> <span id="compass-reading">--</span>°</p>
-            <p><strong>Facing Direction:</strong> <span id="facing-direction">--</span></p>
+            <p class="loading" id="status">Inicializando brújula...</p>
+            <p><strong>Dirección de la Brújula:</strong> <span id="compass-reading">--</span>°</p>
+            <p><strong>Dirección hacia donde apunta:</strong> <span id="facing-direction">--</span></p>
         </div>
 
         <div class="compass-container">
@@ -117,122 +117,122 @@
         </div>
 
         <div class="sector-info" id="sector-info">
-            <h2>Point your device to a direction to see specific feng shui recommendations</h2>
+            <h2>Apunta tu dispositivo a una dirección para ver recomendaciones específicas de feng shui</h2>
         </div>
     </div>
 
     <script>
         const sectorData = {
-            'North': {
-                element: 'Water',
-                area: 'Career & Life Path',
+            'Norte': {
+                element: 'Agua',
+                area: 'Carrera y Camino de Vida',
                 cures: [
-                    'Add water features like fountains or aquariums',
-                    'Use black or dark blue decor',
-                    'Display images of water scenes',
-                    'Add wavy or curved shapes',
-                    'Use mirrors to represent water',
-                    'Keep this area clean and clutter-free',
-                    'Add career-related symbols or awards',
-                    'Include metal elements (white, gray, metallic colors) as Metal nourishes Water in the productive cycle'
+                    'Añadir elementos de agua como fuentes o acuarios',
+                    'Usar decoración negra o azul oscuro',
+                    'Mostrar imágenes de escenas acuáticas',
+                    'Añadir formas onduladas o curvas',
+                    'Usar espejos para representar el agua',
+                    'Mantener esta área limpia y libre de desorden',
+                    'Añadir símbolos o premios relacionados con la carrera',
+                    'Incluir elementos de metal (blanco, gris, colores metálicos) ya que el Metal nutre al Agua en el ciclo productivo'
                 ]
             },
-            'Northeast': {
-                element: 'Earth',
-                area: 'Knowledge & Education',
+            'Noreste': {
+                element: 'Tierra',
+                area: 'Conocimiento y Educación',
                 cures: [
-                    'Place crystals or stones',
-                    'Add ceramic or pottery items',
-                    'Use earth tone colors (beige, yellow, brown)',
-                    'Create a study or meditation area',
-                    'Display books and educational materials',
-                    'Add mountain imagery',
-                    'Use square shapes and patterns',
-                    'Include fire elements (candles, red accents) as Fire nourishes Earth in the productive cycle'
+                    'Colocar cristales o piedras',
+                    'Añadir artículos de cerámica o alfarería',
+                    'Usar colores tierra (beige, amarillo, marrón)',
+                    'Crear un área de estudio o meditación',
+                    'Mostrar libros y materiales educativos',
+                    'Añadir imágenes de montañas',
+                    'Usar formas cuadradas y patrones',
+                    'Incluir elementos de fuego (velas, acentos rojos) ya que el Fuego nutre a la Tierra en el ciclo productivo'
                 ]
             },
-            'East': {
-                element: 'Wood',
-                area: 'Family & Health',
+            'Este': {
+                element: 'Madera',
+                area: 'Familia y Salud',
                 cures: [
-                    'Add healthy plants or flowers',
-                    'Use wooden furniture or decor',
-                    'Display family photos in wooden frames',
-                    'Use green and brown colors',
-                    'Place bamboo or lucky bamboo',
-                    'Use rectangular shapes',
-                    'Keep this area vibrant and alive',
-                    'Include water elements (fountains, blue colors) as Water nourishes Wood in the productive cycle'
+                    'Añadir plantas saludables o flores',
+                    'Usar muebles o decoración de madera',
+                    'Mostrar fotos familiares en marcos de madera',
+                    'Usar colores verde y marrón',
+                    'Colocar bambú o bambú de la suerte',
+                    'Usar formas rectangulares',
+                    'Mantener esta área vibrante y viva',
+                    'Incluir elementos de agua (fuentes, colores azules) ya que el Agua nutre a la Madera en el ciclo productivo'
                 ]
             },
-            'Southeast': {
-                element: 'Wood',
-                area: 'Wealth & Prosperity',
+            'Sureste': {
+                element: 'Madera',
+                area: 'Riqueza y Prosperidad',
                 cures: [
-                    'Place a money tree or jade plant',
-                    'Add a small fountain (flowing inward)',
-                    'Use purple, gold, or green accents',
-                    'Display symbols of abundance',
-                    'Keep a bowl of coins or crystals',
-                    'Add wind chimes for energy flow',
-                    'Ensure good lighting in this area',
-                    'Include water elements (aquarium, water imagery) as Water nourishes Wood in the productive cycle'
+                    'Colocar un árbol del dinero o planta de jade',
+                    'Añadir una fuente pequeña (que fluya hacia adentro)',
+                    'Usar acentos púrpura, dorado o verde',
+                    'Mostrar símbolos de abundancia',
+                    'Mantener un cuenco de monedas o cristales',
+                    'Añadir campanas de viento para el flujo de energía',
+                    'Asegurar buena iluminación en esta área',
+                    'Incluir elementos de agua (acuario, imágenes de agua) ya que el Agua nutre a la Madera en el ciclo productivo'
                 ]
             },
-            'South': {
-                element: 'Fire',
-                area: 'Fame & Recognition',
+            'Sur': {
+                element: 'Fuego',
+                area: 'Fama y Reconocimiento',
                 cures: [
-                    'Add candles or bright lighting',
-                    'Use red or orange decor',
-                    'Display awards and certificates',
-                    'Add triangular or pointed shapes',
-                    'Place red flowers or artwork',
-                    'Display your achievements',
-                    'Add a fireplace or red lamp',
-                    'Include wood elements (plants, green colors) as Wood nourishes Fire in the productive cycle'
+                    'Añadir velas o iluminación brillante',
+                    'Usar decoración roja o naranja',
+                    'Mostrar premios y certificados',
+                    'Añadir formas triangulares o puntiagudas',
+                    'Colocar flores rojas o arte',
+                    'Mostrar tus logros',
+                    'Añadir una chimenea o lámpara roja',
+                    'Incluir elementos de madera (plantas, colores verdes) ya que la Madera nutre al Fuego en el ciclo productivo'
                 ]
             },
-            'Southwest': {
-                element: 'Earth',
-                area: 'Love & Relationships',
+            'Suroeste': {
+                element: 'Tierra',
+                area: 'Amor y Relaciones',
                 cures: [
-                    'Use pairs of objects (2 candles, 2 pillows)',
-                    'Add rose quartz or pink crystals',
-                    'Display romantic artwork or photos',
-                    'Use pink, red, or earth tones',
-                    'Place fresh flowers (especially peonies)',
-                    'Add ceramic or pottery pairs',
-                    'Create a cozy seating area for two',
-                    'Include fire elements (candles, pink/red colors) as Fire nourishes Earth in the productive cycle'
+                    'Usar pares de objetos (2 velas, 2 almohadas)',
+                    'Añadir cuarzo rosa o cristales rosados',
+                    'Mostrar arte romántico o fotos',
+                    'Usar tonos rosa, rojo o tierra',
+                    'Colocar flores frescas (especialmente peonías)',
+                    'Añadir pares de cerámica o alfarería',
+                    'Crear un área acogedora para dos personas',
+                    'Incluir elementos de fuego (velas, colores rosa/rojo) ya que el Fuego nutre a la Tierra en el ciclo productivo'
                 ]
             },
-            'West': {
+            'Oeste': {
                 element: 'Metal',
-                area: 'Children & Creativity',
+                area: 'Hijos y Creatividad',
                 cures: [
-                    'Add metal decor or sculptures',
-                    'Use white or metallic colors',
-                    'Display children\'s artwork or photos',
-                    'Create a creative workspace',
-                    'Add round or circular shapes',
-                    'Place bells or chimes',
-                    'Keep playful or whimsical items',
-                    'Include earth elements (crystals, yellow colors) as Earth nourishes Metal in the productive cycle'
+                    'Añadir decoración o esculturas de metal',
+                    'Usar colores blancos o metálicos',
+                    'Mostrar arte o fotos de niños',
+                    'Crear un espacio de trabajo creativo',
+                    'Añadir formas redondas o circulares',
+                    'Colocar campanas o carillones',
+                    'Mantener artículos lúdicos o caprichosos',
+                    'Incluir elementos de tierra (cristales, colores amarillos) ya que la Tierra nutre al Metal en el ciclo productivo'
                 ]
             },
-            'Northwest': {
+            'Noroeste': {
                 element: 'Metal',
-                area: 'Helpful People & Travel',
+                area: 'Personas Útiles y Viajes',
                 cures: [
-                    'Add metal objects or decor',
-                    'Display travel photos or maps',
-                    'Use white, gray, or metallic colors',
-                    'Place religious or spiritual items',
-                    'Add images of mentors or guides',
-                    'Use circular or dome shapes',
-                    'Display globe or travel souvenirs',
-                    'Include earth elements (stones, ceramic items) as Earth nourishes Metal in the productive cycle'
+                    'Añadir objetos o decoración de metal',
+                    'Mostrar fotos o mapas de viajes',
+                    'Usar colores blanco, gris o metálicos',
+                    'Colocar artículos religiosos o espirituales',
+                    'Añadir imágenes de mentores o guías',
+                    'Usar formas circulares o de cúpula',
+                    'Mostrar globo terráqueo o recuerdos de viaje',
+                    'Incluir elementos de tierra (piedras, artículos cerámicos) ya que la Tierra nutre al Metal en el ciclo productivo'
                 ]
             }
         };
@@ -243,7 +243,7 @@
             
             const infoDiv = document.getElementById('sector-info');
             infoDiv.innerHTML = `
-                <h2>${direction} - ${data.element} Element</h2>
+                <h2>${direction} - Elemento ${data.element}</h2>
                 <h3>${data.area}</h3>
                 <ul class="cure-list">
                     ${data.cures.map(cure => `<li>${cure}</li>`).join('')}
@@ -255,14 +255,14 @@
             document.getElementById('compass-reading').textContent = Math.round(heading);
             
             let facingDirection = '';
-            if (heading >= 337.5 || heading < 22.5) facingDirection = 'North';
-            else if (heading >= 22.5 && heading < 67.5) facingDirection = 'Northeast';
-            else if (heading >= 67.5 && heading < 112.5) facingDirection = 'East';
-            else if (heading >= 112.5 && heading < 157.5) facingDirection = 'Southeast';
-            else if (heading >= 157.5 && heading < 202.5) facingDirection = 'South';
-            else if (heading >= 202.5 && heading < 247.5) facingDirection = 'Southwest';
-            else if (heading >= 247.5 && heading < 292.5) facingDirection = 'West';
-            else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
+            if (heading >= 337.5 || heading < 22.5) facingDirection = 'Norte';
+            else if (heading >= 22.5 && heading < 67.5) facingDirection = 'Noreste';
+            else if (heading >= 67.5 && heading < 112.5) facingDirection = 'Este';
+            else if (heading >= 112.5 && heading < 157.5) facingDirection = 'Sureste';
+            else if (heading >= 157.5 && heading < 202.5) facingDirection = 'Sur';
+            else if (heading >= 202.5 && heading < 247.5) facingDirection = 'Suroeste';
+            else if (heading >= 247.5 && heading < 292.5) facingDirection = 'Oeste';
+            else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Noroeste';
             
             document.getElementById('facing-direction').textContent = facingDirection;
             document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
@@ -275,7 +275,7 @@
             window.addEventListener('deviceorientationabsolute', function(event) {
                 if (event.absolute && event.alpha !== null) {
                     updateCompass(event.alpha);
-                    document.getElementById('status').textContent = 'Compass active';
+                    document.getElementById('status').textContent = 'Brújula activa';
                     document.getElementById('status').className = '';
                 }
             });
@@ -283,20 +283,20 @@
             window.addEventListener('deviceorientation', function(event) {
                 if (event.webkitCompassHeading !== undefined) {
                     updateCompass(event.webkitCompassHeading);
-                    document.getElementById('status').textContent = 'Compass active';
+                    document.getElementById('status').textContent = 'Brújula activa';
                     document.getElementById('status').className = '';
                 } else if (event.alpha !== null) {
                     updateCompass(event.alpha);
-                    document.getElementById('status').textContent = 'Compass active';
+                    document.getElementById('status').textContent = 'Brújula activa';
                     document.getElementById('status').className = '';
                 }
             });
             
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Enable Compass</button>';
+                document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Activar Brújula</button>';
             }
         } else {
-            document.getElementById('status').textContent = 'Compass not supported';
+            document.getElementById('status').textContent = 'Brújula no soportada';
             document.getElementById('status').className = 'error';
         }
 
@@ -304,10 +304,10 @@
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
                     if (response == 'granted') {
-                        document.getElementById('status').textContent = 'Compass active';
+                        document.getElementById('status').textContent = 'Brújula activa';
                         document.getElementById('status').className = '';
                     } else {
-                        document.getElementById('status').textContent = 'Compass permission denied';
+                        document.getElementById('status').textContent = 'Permiso de brújula denegado';
                         document.getElementById('status').className = 'error';
                     }
                 })
