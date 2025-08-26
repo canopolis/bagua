@@ -265,7 +265,7 @@
             else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
             
             document.getElementById('facing-direction').textContent = facingDirection;
-            document.getElementById('bagua').style.transform = `rotate(${heading}deg)`;
+            document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
             
             // Update sector info based on current direction
             updateSectorInfo(facingDirection);
