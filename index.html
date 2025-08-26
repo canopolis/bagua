@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lo Pan Bagua Feng Shui Map</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .compass-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto 30px;
+        }
+
+        #bagua {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .center-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid rgba(255,255,255,0.9);
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .compass-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sector-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .sector-info h2 {
+            color: #8B4513;
+            margin-top: 0;
+        }
+
+        .cure-list {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .error {
+            color: #d32f2f;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .loading {
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .compass-container {
+                width: 350px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lo Pan Bagua Feng Shui Map</h1>
+
+        <div class="compass-info">
+            <p class="loading" id="status">Inicializando brújula...</p>
+            <p><strong>Dirección de la Brújula:</strong> <span id="compass-reading">--</span>°</p>
+            <p><strong>Dirección hacia donde apunta:</strong> <span id="facing-direction">--</span></p>
+        </div>
+
+        <div class="compass-container">
+            <img id="bagua" src="https://i.ibb.co/d0f7cV59/bagua.png" alt="Bagua Map">
+            <div class="center-arrow"></div>
+        </div>
+
+        <div class="sector-info" id="sector-info">
+            <h2>Apunta tu dispositivo a una dirección para ver recomendaciones específicas de feng shui</h2>
+        </div>
+    </div>
+
+    <script>
+        const sectorData = {
+            'Norte': {
+                element: 'Agua',
+                area: 'Carrera y Camino de Vida',
+                cures: [
+                    'Añadir elementos de agua como fuentes o acuarios',
+                    'Usar decoración negra o azul oscuro',
+                    'Mostrar imágenes de escenas acuáticas',
+                    'Añadir formas onduladas o curvas',
+                    'Usar espejos para representar el agua',
+                    'Mantener esta área limpia y libre de desorden',
+                    'Añadir símbolos o premios relacionados con la carrera',
+                    'Incluir elementos de metal (blanco, gris, colores metálicos) ya que el Metal nutre al Agua en el ciclo productivo'
+                ]
+            },
+            'Noreste': {
+                element: 'Tierra',
+                area: 'Conocimiento y Educación',
+                cures: [
+                    'Colocar cristales o piedras',
+                    'Añadir artículos de cerámica o alfarería',
+                    'Usar colores tierra (beige, amarillo, marrón)',
+                    'Crear un área de estudio o meditación',
+                    'Mostrar libros y materiales educativos',
+                    'Añadir imágenes de montañas',
+                    'Usar formas cuadradas y patrones',
+                    'Incluir elementos de fuego (velas, acentos rojos) ya que el Fuego nutre a la Tierra en el ciclo productivo'
+                ]
+            },
+            'Este': {
+                element: 'Madera',
+                area: 'Familia y Salud',
+                cures: [
+                    'Añadir plantas saludables o flores',
+                    'Usar muebles o decoración de madera',
+                    'Mostrar fotos familiares en marcos de madera',
+                    'Usar colores verde y marrón',
+                    'Colocar bambú o bambú de la suerte',
+                    'Usar formas rectangulares',
+                    'Mantener esta área vibrante y viva',
+                    'Incluir elementos de agua (fuentes, colores azules) ya que el Agua nutre a la Madera en el ciclo productivo'
+                ]
+            },
+            'Sureste': {
+                element: 'Madera',
+                area: 'Riqueza y Prosperidad',
+                cures: [
+                    'Colocar un árbol del dinero o planta de jade',
+                    'Añadir una fuente pequeña (que fluya hacia adentro)',
+                    'Usar acentos púrpura, dorado o verde',
+                    'Mostrar símbolos de abundancia',
+                    'Mantener un cuenco de monedas o cristales',
+                    'Añadir campanas de viento para el flujo de energía',
+                    'Asegurar buena iluminación en esta área',
+                    'Incluir elementos de agua (acuario, imágenes de agua) ya que el Agua nutre a la Madera en el ciclo productivo'
+                ]
+            },
+            'Sur': {
+                element: 'Fuego',
+                area: 'Fama y Reconocimiento',
+                cures: [
+                    'Añadir velas o iluminación brillante',
+                    'Usar decoración roja o naranja',
+                    'Mostrar premios y certificados',
+                    'Añadir formas triangulares o puntiagudas',
+                    'Colocar flores rojas o arte',
+                    'Mostrar tus logros',
+                    'Añadir una chimenea o lámpara roja',
+                    'Incluir elementos de madera (plantas, colores verdes) ya que la Madera nutre al Fuego en el ciclo productivo'
+                ]
+            },
+            'Suroeste': {
+                element: 'Tierra',
+                area: 'Amor y Relaciones',
+                cures: [
+                    'Usar pares de objetos (2 velas, 2 almohadas)',
+                    'Añadir cuarzo rosa o cristales rosados',
+                    'Mostrar arte romántico o fotos',
+                    'Usar tonos rosa, rojo o tierra',
+                    'Colocar flores frescas (especialmente peonías)',
+                    'Añadir pares de cerámica o alfarería',
+                    'Crear un área acogedora para dos personas',
+                    'Incluir elementos de fuego (velas, colores rosa/rojo) ya que el Fuego nutre a la Tierra en el ciclo productivo'
+                ]
+            },
+            'Oeste': {
+                element: 'Metal',
+                area: 'Hijos y Creatividad',
+                cures: [
+                    'Añadir decoración o esculturas de metal',
+                    'Usar colores blancos o metálicos',
+                    'Mostrar arte o fotos de niños',
+                    'Crear un espacio de trabajo creativo',
+                    'Añadir formas redondas o circulares',
+                    'Colocar campanas o carillones',
+                    'Mantener artículos lúdicos o caprichosos',
+                    'Incluir elementos de tierra (cristales, colores amarillos) ya que la Tierra nutre al Metal en el ciclo productivo'
+                ]
+            },
+            'Noroeste': {
+                element: 'Metal',
+                area: 'Personas Útiles y Viajes',
+                cures: [
+                    'Añadir objetos o decoración de metal',
+                    'Mostrar fotos o mapas de viajes',
+                    'Usar colores blanco, gris o metálicos',
+                    'Colocar artículos religiosos o espirituales',
+                    'Añadir imágenes de mentores o guías',
+                    'Usar formas circulares o de cúpula',
+                    'Mostrar globo terráqueo o recuerdos de viaje',
+                    'Incluir elementos de tierra (piedras, artículos cerámicos) ya que la Tierra nutre al Metal en el ciclo productivo'
+                ]
+            }
+        };
+
+        function updateSectorInfo(direction) {
+            const data = sectorData[direction];
+            if (!data) return;
+            
+            const infoDiv = document.getElementById('sector-info');
+            infoDiv.innerHTML = `
+                <h2>${direction} - Elemento ${data.element}</h2>
+                <h3>${data.area}</h3>
+                <ul class="cure-list">
+                    ${data.cures.map(cure => `<li>${cure}</li>`).join('')}
+                </ul>
+            `;
+        }
+
+        function updateCompass(heading) {
+            document.getElementById('compass-reading').textContent = Math.round(heading);
+            
+            let facingDirection = '';
+            if (heading >= 337.5 || heading < 22.5) facingDirection = 'Norte';
+            else if (heading >= 22.5 && heading < 67.5) facingDirection = 'Noreste';
+            else if (heading >= 67.5 && heading < 112.5) facingDirection = 'Este';
+            else if (heading >= 112.5 && heading < 157.5) facingDirection = 'Sureste';
+            else if (heading >= 157.5 && heading < 202.5) facingDirection = 'Sur';
+            else if (heading >= 202.5 && heading < 247.5) facingDirection = 'Suroeste';
+            else if (heading >= 247.5 && heading < 292.5) facingDirection = 'Oeste';
+            else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Noroeste';
+            
+            document.getElementById('facing-direction').textContent = facingDirection;
+            document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+            
+            // Update sector info based on current direction
+            updateSectorInfo(facingDirection);
+        }
+
+        if ('DeviceOrientationEvent' in window) {
+            window.addEventListener('deviceorientationabsolute', function(event) {
+                if (event.absolute && event.alpha !== null) {
+                    updateCompass(event.alpha);
+                    document.getElementById('status').textContent = 'Brújula activa';
+                    document.getElementById('status').className = '';
+                }
+            });
+            
+            window.addEventListener('deviceorientation', function(event) {
+                if (event.webkitCompassHeading !== undefined) {
+                    updateCompass(event.webkitCompassHeading);
+                    document.getElementById('status').textContent = 'Brújula activa';
+                    document.getElementById('status').className = '';
+                } else if (event.alpha !== null) {
+                    updateCompass(event.alpha);
+                    document.getElementById('status').textContent = 'Brújula activa';
+                    document.getElementById('status').className = '';
+                }
+            });
+            
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Activar Brújula</button>';
+            }
+        } else {
+            document.getElementById('status').textContent = 'Brújula no soportada';
+            document.getElementById('status').className = 'error';
+        }
+
+        function requestCompassPermission() {
+            DeviceOrientationEvent.requestPermission()
+                .then(response => {
+                    if (response == 'granted') {
+                        document.getElementById('status').textContent = 'Brújula activa';
+                        document.getElementById('status').className = '';
+                    } else {
+                        document.getElementById('status').textContent = 'Permiso de brújula denegado';
+                        document.getElementById('status').className = 'error';
+                    }
+                })
+                .catch(console.error);
+        }
+
+        if (!'ontouchstart' in window) {
+            document.getElementById('status').innerHTML += '<br><br>Desktop: <input type="range" min="0" max="360" value="0" oninput="updateCompass(this.value)">';
+        }
+    </script>
+</body>
+</html>
