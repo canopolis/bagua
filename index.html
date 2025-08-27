@@ -302,7 +302,13 @@
             }
         }
 
+        let currentDirection = '';
+        
         function updateSectorInfo(direction) {
+            // Only update if not locked
+            if (isLocked) return;
+            
+            currentDirection = direction;
             const data = sectorData[direction];
             if (!data) return;
             
@@ -317,6 +323,7 @@
         }
 
         function updateCompass(heading) {
+            // Always update the reading
             document.getElementById('compass-reading').textContent = Math.round(heading);
             
             let facingDirection = '';
@@ -329,15 +336,13 @@
             else if (heading >= 247.5 && heading < 292.5) facingDirection = 'West';
             else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
             
-            document.getElementById('facing-direction').textContent = facingDirection;
-            
-            // Only rotate if not locked
+            // Only update direction display if not locked
             if (!isLocked) {
+                document.getElementById('facing-direction').textContent = facingDirection;
                 document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+                // Update sector info based on current direction
+                updateSectorInfo(facingDirection);
             }
-            
-            // Update sector info based on current direction
-            updateSectorInfo(facingDirection);
         }
 
         if ('DeviceOrientationEvent' in window) {
