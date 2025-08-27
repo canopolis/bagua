@@ -93,6 +93,40 @@
             color: #666;
         }
 
+        #lockButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #lockButton.locked {
+            background-color: #f44336;
+        }
+
+        #lockButton:hover {
+            opacity: 0.9;
+        }
+
+        .lock-reminder {
+            display: none;
+            color: #ff9800;
+            font-size: 14px;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
         @media (max-width: 600px) {
             .compass-container {
                 width: 350px;
@@ -109,6 +143,8 @@
             <p class="loading" id="status">Initializing compass...</p>
             <p><strong>Compass Direction:</strong> <span id="compass-reading">--</span>°</p>
             <p><strong>Facing Direction:</strong> <span id="facing-direction">--</span></p>
+            <button id="lockButton" onclick="toggleLock()">Lock Zone</button>
+            <p class="lock-reminder" id="lockReminder">⚠️ Remember to unlock the compass to continue exploring other directions</p>
         </div>
 
         <div class="compass-container">
@@ -122,6 +158,9 @@
     </div>
 
     <script>
+        let isLocked = false;
+        let reminderTimeout = null;
+
         const sectorData = {
             'North': {
                 element: 'Water',
@@ -237,6 +276,32 @@
             }
         };
 
+        function toggleLock() {
+            isLocked = !isLocked;
+            const lockButton = document.getElementById('lockButton');
+            const lockReminder = document.getElementById('lockReminder');
+            
+            if (isLocked) {
+                lockButton.textContent = 'Locked Zone';
+                lockButton.classList.add('locked');
+                
+                // Show reminder after 30 seconds
+                reminderTimeout = setTimeout(() => {
+                    lockReminder.style.display = 'block';
+                }, 30000);
+            } else {
+                lockButton.textContent = 'Lock Zone';
+                lockButton.classList.remove('locked');
+                lockReminder.style.display = 'none';
+                
+                // Clear the timeout
+                if (reminderTimeout) {
+                    clearTimeout(reminderTimeout);
+                    reminderTimeout = null;
+                }
+            }
+        }
+
         function updateSectorInfo(direction) {
             const data = sectorData[direction];
             if (!data) return;
@@ -265,7 +330,11 @@
             else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
             
             document.getElementById('facing-direction').textContent = facingDirection;
-            document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+            
+            // Only rotate if not locked
+            if (!isLocked) {
+                document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+            }
             
             // Update sector info based on current direction
             updateSectorInfo(facingDirection);
