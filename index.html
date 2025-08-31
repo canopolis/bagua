@@ -64,7 +64,7 @@
             position: relative; /* Para posicionar el switch */
         }
 
-        /* Nuevo: Estilo para el switch container */
+        /* Estilo para el switch container */
         .switch-container {
             position: absolute;
             bottom: 10px;
@@ -75,7 +75,7 @@
             color: #555;
         }
 
-        /* Nuevo: Estilo para el switch */
+        /* Estilo para el switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -206,9 +206,9 @@
             <button id="lockButton" onclick="toggleLock()">Lock Zone</button>
             <p class="lock-reminder" id="lockReminder">⚠️ Remember to unlock the compass to continue exploring other directions</p>
             
-            <!-- Nuevo: Switch para cambiar de Bagua -->
+            <!-- Switch para cambiar de Bagua con etiqueta dinámica -->
             <div class="switch-container">
-                <span>Bagua 2</span>
+                <span id="bagua-label">Bagua 1</span>
                 <label class="switch">
                     <input type="checkbox" id="baguaToggle">
                     <span class="slider"></span>
@@ -232,10 +232,10 @@
         let reminderTimeout = null;
         let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
 
-        // Nuevo: URLs de las imágenes de Bagua
+        // URLs de las imágenes de Bagua
         const baguaImages = {
-            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto)
-            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa
+            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
+            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa - Bagua 2
         };
 
         const sectorData = {
@@ -353,15 +353,18 @@
             }
         };
 
-        // Nuevo: Función para cambiar la imagen del Bagua
+        // Función para cambiar la imagen del Bagua y actualizar la etiqueta
         function toggleBaguaImage() {
             const baguaImg = document.getElementById('bagua');
             const toggleCheckbox = document.getElementById('baguaToggle');
+            const label = document.getElementById('bagua-label');
             
             if (toggleCheckbox.checked) {
                 baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen
+                label.textContent = 'Bagua 2'; // Actualizar etiqueta
             } else {
                 baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (por defecto)
+                label.textContent = 'Bagua 1'; // Actualizar etiqueta
             }
         }
 
@@ -505,9 +508,13 @@
             document.getElementById('status').innerHTML += '<br><br>Desktop: <input type="range" min="0" max="360" value="0" oninput="updateCompass(this.value)">';
         }
 
-        // Nuevo: Agregar evento al switch
+        // Agregar evento al switch
         document.addEventListener('DOMContentLoaded', function() {
             const toggleCheckbox = document.getElementById('baguaToggle');
+            // Inicializar la etiqueta al cargar la página
+            const label = document.getElementById('bagua-label');
+            label.textContent = toggleCheckbox.checked ? 'Bagua 2' : 'Bagua 1';
+            
             toggleCheckbox.addEventListener('change', toggleBaguaImage);
         });
     </script>
