@@ -61,6 +61,65 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+            position: relative; /* Para posicionar el switch */
+        }
+
+        /* Nuevo: Estilo para el switch container */
+        .switch-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Nuevo: Estilo para el switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin-left: 8px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50; /* Verde cuando está activo */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
         }
 
         .sector-info {
@@ -146,10 +205,19 @@
             <p><strong>Facing Direction:</strong> <span id="facing-direction">--</span></p>
             <button id="lockButton" onclick="toggleLock()">Lock Zone</button>
             <p class="lock-reminder" id="lockReminder">⚠️ Remember to unlock the compass to continue exploring other directions</p>
+            
+            <!-- Nuevo: Switch para cambiar de Bagua -->
+            <div class="switch-container">
+                <span>Bagua 2</span>
+                <label class="switch">
+                    <input type="checkbox" id="baguaToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
 
         <div class="compass-container">
-            <!-- Cambio de imagen -->
+            <!-- Imagen del Bagua (se cambiará dinámicamente) -->
             <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
             <div class="center-arrow"></div>
         </div>
@@ -163,6 +231,12 @@
         let isLocked = false;
         let reminderTimeout = null;
         let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
+
+        // Nuevo: URLs de las imágenes de Bagua
+        const baguaImages = {
+            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto)
+            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa
+        };
 
         const sectorData = {
             'North': {
@@ -278,6 +352,18 @@
                 ]
             }
         };
+
+        // Nuevo: Función para cambiar la imagen del Bagua
+        function toggleBaguaImage() {
+            const baguaImg = document.getElementById('bagua');
+            const toggleCheckbox = document.getElementById('baguaToggle');
+            
+            if (toggleCheckbox.checked) {
+                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen
+            } else {
+                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (por defecto)
+            }
+        }
 
         function toggleLock() {
             isLocked = !isLocked;
@@ -418,6 +504,12 @@
         if (!('ontouchstart' in window)) {
             document.getElementById('status').innerHTML += '<br><br>Desktop: <input type="range" min="0" max="360" value="0" oninput="updateCompass(this.value)">';
         }
+
+        // Nuevo: Agregar evento al switch
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleCheckbox = document.getElementById('baguaToggle');
+            toggleCheckbox.addEventListener('change', toggleBaguaImage);
+        });
     </script>
 </body>
 </html>
