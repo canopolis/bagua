@@ -37,7 +37,7 @@
         #bagua {
             width: 100%;
             height: 100%;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease; /* Reducido para mayor responsividad */
         }
 
         .center-arrow {
@@ -160,6 +160,7 @@
     <script>
         let isLocked = false;
         let reminderTimeout = null;
+        let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
 
         const sectorData = {
             'North': {
@@ -345,27 +346,46 @@
             }
         }
 
+        // Función mejorada para manejar eventos de orientación
+        function handleOrientation(event) {
+            let heading = null;
+            
+            // Priorizar webkitCompassHeading si está disponible (más preciso en Safari)
+            if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+                heading = event.webkitCompassHeading;
+                useWebKitCompass = true;
+            } 
+            // Si no, usar alpha (menos preciso, puede requerir calibración)
+            else if (event.alpha !== null) {
+                // Convertir alpha a grados de brújula (0° = Norte, aumenta en sentido horario)
+                // alpha normalmente es 0° cuando el dispositivo apunta al norte magnético
+                heading = 360 - event.alpha;
+                if (heading >= 360) heading -= 360;
+                useWebKitCompass = false;
+            }
+            
+            if (heading !== null) {
+                updateCompass(heading);
+                document.getElementById('status').textContent = useWebKitCompass ? 
+                    'Compass active (WebKit)' : 'Compass active (Alpha)';
+                document.getElementById('status').className = '';
+            }
+        }
+
         if ('DeviceOrientationEvent' in window) {
-            window.addEventListener('deviceorientationabsolute', function(event) {
-                if (event.absolute && event.alpha !== null) {
-                    updateCompass(event.alpha);
-                    document.getElementById('status').textContent = 'Compass active';
-                    document.getElementById('status').className = '';
-                }
-            });
+            // Intentar usar deviceorientationabsolute primero si está disponible
+            if ('ondeviceorientationabsolute' in window) {
+                window.addEventListener('deviceorientationabsolute', function(event) {
+                    if (event.absolute === true) {
+                        handleOrientation(event);
+                    }
+                });
+            }
             
-            window.addEventListener('deviceorientation', function(event) {
-                if (event.webkitCompassHeading !== undefined) {
-                    updateCompass(event.webkitCompassHeading);
-                    document.getElementById('status').textContent = 'Compass active';
-                    document.getElementById('status').className = '';
-                } else if (event.alpha !== null) {
-                    updateCompass(event.alpha);
-                    document.getElementById('status').textContent = 'Compass active';
-                    document.getElementById('status').className = '';
-                }
-            });
+            // Escuchar deviceorientation como fallback
+            window.addEventListener('deviceorientation', handleOrientation);
             
+            // Solicitar permiso en dispositivos que lo requieren (iOS 13+)
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Enable Compass</button>';
             }
@@ -378,17 +398,22 @@
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
                     if (response == 'granted') {
-                        document.getElementById('status').textContent = 'Compass active';
-                        document.getElementById('status').className = '';
+                        document.getElementById('status').textContent = 'Compass permission granted. Move device to calibrate.';
+                        document.getElementById('status').className = 'loading';
                     } else {
                         document.getElementById('status').textContent = 'Compass permission denied';
                         document.getElementById('status').className = 'error';
                     }
                 })
-                .catch(console.error);
+                .catch(error => {
+                    console.error('Error requesting compass permission:', error);
+                    document.getElementById('status').textContent = 'Error requesting compass permission';
+                    document.getElementById('status').className = 'error';
+                });
         }
 
-        if (!'ontouchstart' in window) {
+        // Agregar control deslizante para escritorio
+        if (!('ontouchstart' in window)) {
             document.getElementById('status').innerHTML += '<br><br>Desktop: <input type="range" min="0" max="360" value="0" oninput="updateCompass(this.value)">';
         }
     </script>
