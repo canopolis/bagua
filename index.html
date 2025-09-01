@@ -245,7 +245,7 @@
 
         <div class="compass-container">
             <!-- Imagen del Bagua (se cambiará dinámicamente) -->
-            <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
+            <img id="bagua" src="https://i.imgur.com/KWY5Exj.jpeg" alt="Bagua Map">
             <div class="center-arrow" id="centerArrow"></div>
             <!-- Marcadores de dirección para Bagua 3 -->
             <div class="direction-marker" id="northMarker" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
@@ -271,9 +271,8 @@
 
         // URLs de las imágenes de Bagua
         const baguaImages = {
-            image1: "https://i.imgur.com/KWY5Exj.jpeg", // Imagen de Bagua 3 como nuevo Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png",   // Imagen original como Bagua 2
-            image3: "https://i.imgur.com/4btrA5O.png"    // Imagen original como Bagua 3
+            image1: "https://i.imgur.com/KWY5Exj.jpeg", // Imagen compartida para Bagua 1 y 3
+            image2: "https://i.imgur.com/U7rSJVZ.png"   // Imagen original como Bagua 2
         };
 
         const sectorData = {
@@ -434,20 +433,20 @@
                 baguaImg.style.transform = `rotate(${-getCurrentHeading()}deg)`;
             } else if (currentBaguaMode === 2) {
                 currentBaguaMode = 3;
-                baguaImg.src = baguaImages.image3;
+                baguaImg.src = baguaImages.image1;
                 label.textContent = 'Bagua 3';
-                centerArrow.style.display = 'block';
-                directionMarkers.forEach(marker => marker.style.display = 'none');
-                // Restaurar la rotación normal
-                baguaImg.style.transform = `rotate(${-getCurrentHeading()}deg)`;
+                centerArrow.style.display = 'none';
+                directionMarkers.forEach(marker => marker.style.display = 'block');
+                // Eliminar rotación del centro en Bagua 3
+                baguaImg.style.transform = 'none';
             } else {
                 currentBaguaMode = 1;
                 baguaImg.src = baguaImages.image1;
                 label.textContent = 'Bagua 1';
-                centerArrow.style.display = 'none';
-                directionMarkers.forEach(marker => marker.style.display = 'block');
-                // Eliminar rotación del centro en Bagua 1 (nueva imagen)
-                baguaImg.style.transform = 'none';
+                centerArrow.style.display = 'block';
+                directionMarkers.forEach(marker => marker.style.display = 'none');
+                // Restaurar la rotación normal en Bagua 1
+                baguaImg.style.transform = `rotate(${-getCurrentHeading()}deg)`;
             }
         }
 
@@ -526,8 +525,8 @@
                 document.getElementById('facing-direction').textContent = facingDirection;
                 
                 // Aplicar transformación según el modo
-                if (currentBaguaMode === 1) {
-                    // En Bagua 1 (nueva imagen), solo rotamos los trazos, no el centro
+                if (currentBaguaMode === 3) {
+                    // En Bagua 3, solo rotamos los trazos, no el centro
                     document.getElementById('bagua').style.transform = 'none';
                     // Mostrar marcador de dirección
                     hideAllMarkers();
