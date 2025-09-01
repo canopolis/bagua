@@ -6,7 +6,7 @@
     <title>Lo Pan Bagua Feng Shui Map</title>
     
     <!-- iOS Homescreen Icons - Múltiples tamaños para mejor compatibilidad -->
-    <!-- Ahora apunta a la nueva imagen para el ícono -->
+    <!-- Se mantiene el ícono del homescreen con la imagen anterior que funcionó -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/LFsDru4.png">
     <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/LFsDru4.png">
     <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/LFsDru4.png">
@@ -234,8 +234,8 @@
 
         <div class="compass-container">
             <!-- Imagen del Bagua (se cambiará dinámicamente) -->
-            <!-- Ahora apunta a la nueva imagen por defecto -->
-            <img id="bagua" src="https://i.imgur.com/LFsDru4.png" alt="Bagua Map">
+            <!-- Ahora apunta a la nueva imagen actualizada para Bagua 1 -->
+            <img id="bagua" src="https://i.imgur.com/JU5HrEb.png" alt="Bagua Map">
             <div class="center-arrow"></div>
         </div>
 
@@ -251,9 +251,9 @@
 
         // URLs de las imágenes de Bagua - Actualizadas
         const baguaImages = {
-            // image1 ahora apunta a la nueva imagen
-            image1: "https://i.imgur.com/LFsDru4.png", // Nueva imagen (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png"   // Imagen alternativa - Bagua 2 (la que ya funcionaba para el ícono)
+            // image1 ahora apunta a la nueva imagen actualizada para Bagua 1
+            image1: "https://i.imgur.com/JU5HrEb.png",  // Imagen actualizada (por defecto) - Bagua 1
+            image2: "https://i.imgur.com/U7rSJVZ.png"   // Imagen alternativa - Bagua 2 (se mantiene igual)
         };
 
         const sectorData = {
@@ -378,10 +378,10 @@
             const label = document.getElementById('bagua-label');
             
             if (toggleCheckbox.checked) {
-                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen (U7rSJVZ.png)
+                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen (U7rSJVZ.png - Bagua 2)
                 label.textContent = 'Bagua 2'; // Actualizar etiqueta
             } else {
-                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (LFsDru4.png - nueva)
+                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (JU5HrEb.png - Bagua 1 actualizado)
                 label.textContent = 'Bagua 1'; // Actualizar etiqueta
             }
         }
