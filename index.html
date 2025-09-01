@@ -6,10 +6,11 @@
     <title>Lo Pan Bagua Feng Shui Map</title>
     
     <!-- iOS Homescreen Icons - Múltiples tamaños para mejor compatibilidad -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/U7rSJVZ.png">
+    <!-- Ahora apunta a la nueva imagen para el ícono -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/LFsDru4.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/LFsDru4.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/LFsDru4.png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/LFsDru4.png">
     
     <!-- Web App Manifest for better PWA support -->
     <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
@@ -233,7 +234,8 @@
 
         <div class="compass-container">
             <!-- Imagen del Bagua (se cambiará dinámicamente) -->
-            <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
+            <!-- Ahora apunta a la nueva imagen por defecto -->
+            <img id="bagua" src="https://i.imgur.com/LFsDru4.png" alt="Bagua Map">
             <div class="center-arrow"></div>
         </div>
 
@@ -247,10 +249,11 @@
         let reminderTimeout = null;
         let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
 
-        // URLs de las imágenes de Bagua
+        // URLs de las imágenes de Bagua - Actualizadas
         const baguaImages = {
-            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa - Bagua 2
+            // image1 ahora apunta a la nueva imagen
+            image1: "https://i.imgur.com/LFsDru4.png", // Nueva imagen (por defecto) - Bagua 1
+            image2: "https://i.imgur.com/U7rSJVZ.png"   // Imagen alternativa - Bagua 2 (la que ya funcionaba para el ícono)
         };
 
         const sectorData = {
@@ -375,10 +378,10 @@
             const label = document.getElementById('bagua-label');
             
             if (toggleCheckbox.checked) {
-                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen
+                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen (U7rSJVZ.png)
                 label.textContent = 'Bagua 2'; // Actualizar etiqueta
             } else {
-                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (por defecto)
+                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (LFsDru4.png - nueva)
                 label.textContent = 'Bagua 1'; // Actualizar etiqueta
             }
         }
