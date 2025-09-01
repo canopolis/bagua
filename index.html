@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="https://i.imgur.com/U7rSJVZ.png">
     
     <!-- Web App Manifest for better PWA support -->
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
+    <link rel="manifest" href="application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
     
     <!-- Startup image (optional) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -271,9 +271,9 @@
 
         // URLs de las imágenes de Bagua
         const baguaImages = {
-            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png",  // Imagen alternativa - Bagua 2
-            image3: "https://i.imgur.com/KWY5Exj.jpeg"  // Nueva imagen - Bagua 3
+            image1: "https://i.imgur.com/KWY5Exj.jpeg", // Imagen de Bagua 3 como nuevo Bagua 1
+            image2: "https://i.imgur.com/U7rSJVZ.png",   // Imagen original como Bagua 2
+            image3: "https://i.imgur.com/4btrA5O.png"    // Imagen original como Bagua 3
         };
 
         const sectorData = {
@@ -430,25 +430,32 @@
                 label.textContent = 'Bagua 2';
                 centerArrow.style.display = 'block';
                 directionMarkers.forEach(marker => marker.style.display = 'none');
+                // Restaurar la rotación normal
+                baguaImg.style.transform = `rotate(${-getCurrentHeading()}deg)`;
             } else if (currentBaguaMode === 2) {
                 currentBaguaMode = 3;
                 baguaImg.src = baguaImages.image3;
                 label.textContent = 'Bagua 3';
-                centerArrow.style.display = 'none';
-                directionMarkers.forEach(marker => marker.style.display = 'block');
+                centerArrow.style.display = 'block';
+                directionMarkers.forEach(marker => marker.style.display = 'none');
+                // Restaurar la rotación normal
+                baguaImg.style.transform = `rotate(${-getCurrentHeading()}deg)`;
             } else {
                 currentBaguaMode = 1;
                 baguaImg.src = baguaImages.image1;
                 label.textContent = 'Bagua 1';
-                centerArrow.style.display = 'block';
-                directionMarkers.forEach(marker => marker.style.display = 'none');
-            }
-            
-            // Aplicar transformación según el modo
-            if (currentBaguaMode === 3) {
-                // En Bagua 3, solo rotamos los trazos, no el centro
+                centerArrow.style.display = 'none';
+                directionMarkers.forEach(marker => marker.style.display = 'block');
+                // Eliminar rotación del centro en Bagua 1 (nueva imagen)
                 baguaImg.style.transform = 'none';
             }
+        }
+
+        // Variable para almacenar el heading actual
+        let currentHeading = 0;
+
+        function getCurrentHeading() {
+            return currentHeading;
         }
 
         function toggleLock() {
@@ -511,19 +518,24 @@
             else if (heading >= 247.5 && heading < 292.5) facingDirection = 'West';
             else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
             
+            // Store current heading
+            currentHeading = heading;
+            
             // Only update direction display if not locked
             if (!isLocked) {
                 document.getElementById('facing-direction').textContent = facingDirection;
                 
                 // Aplicar transformación según el modo
-                if (currentBaguaMode === 3) {
-                    // En Bagua 3, solo rotamos los trazos, no el centro
+                if (currentBaguaMode === 1) {
+                    // En Bagua 1 (nueva imagen), solo rotamos los trazos, no el centro
                     document.getElementById('bagua').style.transform = 'none';
                     // Mostrar marcador de dirección
                     hideAllMarkers();
                     showDirectionMarker(facingDirection);
                 } else {
                     document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+                    // Ocultar marcadores en modo normal
+                    hideAllMarkers();
                 }
                 
                 // Update sector info based on current direction
