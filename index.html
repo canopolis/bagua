@@ -70,6 +70,18 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
+        .direction-marker {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid #FFD700; /* Amarillo dorado para mejor visibilidad */
+            z-index: 11;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            display: none;
+        }
+
         .compass-info {
             background: white;
             padding: 15px;
@@ -234,7 +246,16 @@
         <div class="compass-container">
             <!-- Imagen del Bagua (se cambiará dinámicamente) -->
             <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
-            <div class="center-arrow"></div>
+            <div class="center-arrow" id="centerArrow"></div>
+            <!-- Marcadores de dirección para Bagua 3 -->
+            <div class="direction-marker" id="northMarker" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
+            <div class="direction-marker" id="northeastMarker" style="top: 15px; right: 15px; transform: rotate(45deg);"></div>
+            <div class="direction-marker" id="eastMarker" style="top: 50%; right: -10px; transform: translateY(-50%) rotate(90deg);"></div>
+            <div class="direction-marker" id="southeastMarker" style="bottom: 15px; right: 15px; transform: rotate(135deg);"></div>
+            <div class="direction-marker" id="southMarker" style="bottom: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);"></div>
+            <div class="direction-marker" id="southwestMarker" style="bottom: 15px; left: 15px; transform: rotate(225deg);"></div>
+            <div class="direction-marker" id="westMarker" style="top: 50%; left: -10px; transform: translateY(-50%) rotate(270deg);"></div>
+            <div class="direction-marker" id="northwestMarker" style="top: 15px; left: 15px; transform: rotate(315deg);"></div>
         </div>
 
         <div class="sector-info" id="sector-info">
@@ -246,11 +267,13 @@
         let isLocked = false;
         let reminderTimeout = null;
         let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
+        let currentBaguaMode = 1; // 1: Bagua 1, 2: Bagua 2, 3: Bagua 3
 
         // URLs de las imágenes de Bagua
         const baguaImages = {
             image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa - Bagua 2
+            image2: "https://i.imgur.com/U7rSJVZ.png",  // Imagen alternativa - Bagua 2
+            image3: "https://i.imgur.com/KWY5Exj.jpeg"  // Nueva imagen - Bagua 3
         };
 
         const sectorData = {
@@ -265,7 +288,10 @@
                     'Use mirrors to represent water',
                     'Keep this area clean and clutter-free',
                     'Add career-related symbols or awards',
-                    'Include metal elements (white, gray, metallic colors) as Metal nourishes Water in the productive cycle'
+                    'Include metal elements (white, gray, metallic colors) as Metal nourishes Water in the productive cycle',
+                    'Use Black Tourmaline or Obsidian in pyramid shape for protection and grounding',
+                    'Place Clear Quartz points facing inward to amplify career energy',
+                    'Use Amethyst clusters for wisdom and clarity in career decisions'
                 ]
             },
             'Northeast': {
@@ -279,7 +305,10 @@
                     'Display books and educational materials',
                     'Add mountain imagery',
                     'Use square shapes and patterns',
-                    'Include fire elements (candles, red accents) as Fire nourishes Earth in the productive cycle'
+                    'Include fire elements (candles, red accents) as Fire nourishes Earth in the productive cycle',
+                    'Use Citrine or Yellow Jasper in cube shape to enhance learning and memory',
+                    'Place Tiger Eye stones for focus and mental clarity',
+                    'Use Carnelian in pyramid shape to stimulate creativity and knowledge'
                 ]
             },
             'East': {
@@ -293,7 +322,10 @@
                     'Place bamboo or lucky bamboo',
                     'Use rectangular shapes',
                     'Keep this area vibrant and alive',
-                    'Include water elements (fountains, blue colors) as Water nourishes Wood in the productive cycle'
+                    'Include water elements (fountains, blue colors) as Water nourishes Wood in the productive cycle',
+                    'Use Green Aventurine in wand or palm stone form for family harmony',
+                    'Place Jade stones for health and longevity',
+                    'Use Emerald chips in bowl for family unity and growth'
                 ]
             },
             'Southeast': {
@@ -307,7 +339,10 @@
                     'Keep a bowl of coins or crystals',
                     'Add wind chimes for energy flow',
                     'Ensure good lighting in this area',
-                    'Include water elements (aquarium, water imagery) as Water nourishes Wood in the productive cycle'
+                    'Include water elements (aquarium, water imagery) as Water nourishes Wood in the productive cycle',
+                    'Use Citrine points or clusters for wealth attraction',
+                    'Place Pyrite cubes for financial stability and abundance',
+                    'Use Peridot in heart shape for prosperity and growth'
                 ]
             },
             'South': {
@@ -321,7 +356,10 @@
                     'Place red flowers or artwork',
                     'Display your achievements',
                     'Add a fireplace or red lamp',
-                    'Include wood elements (plants, green colors) as Wood nourishes Fire in the productive cycle'
+                    'Include wood elements (plants, green colors) as Wood nourishes Fire in the productive cycle',
+                    'Use Red Jasper or Carnelian in pointed shapes for recognition',
+                    'Place Sunstone for leadership and personal power',
+                    'Use Ruby chips in bowl for fame and success'
                 ]
             },
             'Southwest': {
@@ -335,7 +373,10 @@
                     'Place fresh flowers (especially peonies)',
                     'Add ceramic or pottery pairs',
                     'Create a cozy seating area for two',
-                    'Include fire elements (candles, pink/red colors) as Fire nourishes Earth in the productive cycle'
+                    'Include fire elements (candles, pink/red colors) as Fire nourishes Earth in the productive cycle',
+                    'Use Rose Quartz spheres for love and relationships',
+                    'Place Pink Tourmaline hearts for emotional healing',
+                    'Use Rhodochrosite in heart shape for deep connections'
                 ]
             },
             'West': {
@@ -349,7 +390,10 @@
                     'Add round or circular shapes',
                     'Place bells or chimes',
                     'Keep playful or whimsical items',
-                    'Include earth elements (crystals, yellow colors) as Earth nourishes Metal in the productive cycle'
+                    'Include earth elements (crystals, yellow colors) as Earth nourishes Metal in the productive cycle',
+                    'Use White Howlite or Selenite in circular shapes for creativity',
+                    'Place Hematite spheres for focus and concentration',
+                    'Use Moonstone in crescent shape for intuition and inspiration'
                 ]
             },
             'Northwest': {
@@ -363,7 +407,10 @@
                     'Add images of mentors or guides',
                     'Use circular or dome shapes',
                     'Display globe or travel souvenirs',
-                    'Include earth elements (stones, ceramic items) as Earth nourishes Metal in the productive cycle'
+                    'Include earth elements (stones, ceramic items) as Earth nourishes Metal in the productive cycle',
+                    'Use Clear Quartz or Amethyst in sphere shape for spiritual guidance',
+                    'Place Black Onyx for protection during travels',
+                    'Use Smoky Quartz points for grounding and support from mentors'
                 ]
             }
         };
@@ -373,13 +420,34 @@
             const baguaImg = document.getElementById('bagua');
             const toggleCheckbox = document.getElementById('baguaToggle');
             const label = document.getElementById('bagua-label');
+            const centerArrow = document.getElementById('centerArrow');
+            const directionMarkers = document.querySelectorAll('.direction-marker');
             
-            if (toggleCheckbox.checked) {
-                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen
-                label.textContent = 'Bagua 2'; // Actualizar etiqueta
+            // Simular un toggle de 3 estados
+            if (currentBaguaMode === 1) {
+                currentBaguaMode = 2;
+                baguaImg.src = baguaImages.image2;
+                label.textContent = 'Bagua 2';
+                centerArrow.style.display = 'block';
+                directionMarkers.forEach(marker => marker.style.display = 'none');
+            } else if (currentBaguaMode === 2) {
+                currentBaguaMode = 3;
+                baguaImg.src = baguaImages.image3;
+                label.textContent = 'Bagua 3';
+                centerArrow.style.display = 'none';
+                directionMarkers.forEach(marker => marker.style.display = 'block');
             } else {
-                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (por defecto)
-                label.textContent = 'Bagua 1'; // Actualizar etiqueta
+                currentBaguaMode = 1;
+                baguaImg.src = baguaImages.image1;
+                label.textContent = 'Bagua 1';
+                centerArrow.style.display = 'block';
+                directionMarkers.forEach(marker => marker.style.display = 'none');
+            }
+            
+            // Aplicar transformación según el modo
+            if (currentBaguaMode === 3) {
+                // En Bagua 3, solo rotamos los trazos, no el centro
+                baguaImg.style.transform = 'none';
             }
         }
 
@@ -446,9 +514,33 @@
             // Only update direction display if not locked
             if (!isLocked) {
                 document.getElementById('facing-direction').textContent = facingDirection;
-                document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+                
+                // Aplicar transformación según el modo
+                if (currentBaguaMode === 3) {
+                    // En Bagua 3, solo rotamos los trazos, no el centro
+                    document.getElementById('bagua').style.transform = 'none';
+                    // Mostrar marcador de dirección
+                    hideAllMarkers();
+                    showDirectionMarker(facingDirection);
+                } else {
+                    document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
+                }
+                
                 // Update sector info based on current direction
                 updateSectorInfo(facingDirection);
+            }
+        }
+
+        function hideAllMarkers() {
+            const markers = document.querySelectorAll('.direction-marker');
+            markers.forEach(marker => marker.style.display = 'none');
+        }
+
+        function showDirectionMarker(direction) {
+            const markerId = direction.toLowerCase() + 'Marker';
+            const marker = document.getElementById(markerId);
+            if (marker) {
+                marker.style.display = 'block';
             }
         }
 
@@ -528,7 +620,7 @@
             const toggleCheckbox = document.getElementById('baguaToggle');
             // Inicializar la etiqueta al cargar la página
             const label = document.getElementById('bagua-label');
-            label.textContent = toggleCheckbox.checked ? 'Bagua 2' : 'Bagua 1';
+            label.textContent = 'Bagua 1';
             
             toggleCheckbox.addEventListener('change', toggleBaguaImage);
         });
