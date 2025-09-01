@@ -6,11 +6,10 @@
     <title>Lo Pan Bagua Feng Shui Map</title>
     
     <!-- iOS Homescreen Icons - Múltiples tamaños para mejor compatibilidad -->
-    <!-- Se mantiene el ícono del homescreen con la imagen anterior que funcionó -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/LFsDru4.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/LFsDru4.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/LFsDru4.png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/LFsDru4.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/U7rSJVZ.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/U7rSJVZ.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/U7rSJVZ.png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/U7rSJVZ.png">
     
     <!-- Web App Manifest for better PWA support -->
     <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
@@ -234,8 +233,7 @@
 
         <div class="compass-container">
             <!-- Imagen del Bagua (se cambiará dinámicamente) -->
-            <!-- Ahora apunta a la nueva imagen actualizada para Bagua 1 -->
-            <img id="bagua" src="https://i.imgur.com/JU5HrEb.png" alt="Bagua Map">
+            <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
             <div class="center-arrow"></div>
         </div>
 
@@ -249,11 +247,10 @@
         let reminderTimeout = null;
         let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
 
-        // URLs de las imágenes de Bagua - Actualizadas
+        // URLs de las imágenes de Bagua
         const baguaImages = {
-            // image1 ahora apunta a la nueva imagen actualizada para Bagua 1
-            image1: "https://i.imgur.com/JU5HrEb.png",  // Imagen actualizada (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png"   // Imagen alternativa - Bagua 2 (se mantiene igual)
+            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
+            image2: "https://i.imgur.com/U7rSJVZ.png"  // Imagen alternativa - Bagua 2
         };
 
         const sectorData = {
@@ -378,10 +375,10 @@
             const label = document.getElementById('bagua-label');
             
             if (toggleCheckbox.checked) {
-                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen (U7rSJVZ.png - Bagua 2)
+                baguaImg.src = baguaImages.image2; // Cambiar a la segunda imagen
                 label.textContent = 'Bagua 2'; // Actualizar etiqueta
             } else {
-                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (JU5HrEb.png - Bagua 1 actualizado)
+                baguaImg.src = baguaImages.image1; // Cambiar a la primera imagen (por defecto)
                 label.textContent = 'Bagua 1'; // Actualizar etiqueta
             }
         }
