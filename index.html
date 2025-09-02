@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lo Pan Bagua Feng Shui Map</title>
-    
-    <!-- iOS Homescreen Icons - Múltiples tamaños para mejor compatibilidad -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://i.imgur.com/U7rSJVZ.png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/U7rSJVZ.png">
-    
-    <!-- Web App Manifest for better PWA support -->
+
+    <!-- iOS Homescreen Icons - Todos con la nueva imagen -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/RVzPvw7p/map.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/RVzPvw7p/map.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://i.postimg.cc/RVzPvw7p/map.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/RVzPvw7p/map.png">
+
+    <!-- Web App Manifest -->
     <link rel="manifest" href="application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
-    
-    <!-- Startup image (optional) -->
+
+    <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Bagua Feng Shui">
-    
+
     <style>
         body {
             margin: 0;
@@ -52,22 +52,7 @@
         #bagua {
             width: 100%;
             height: 100%;
-            transition: transform 0.2s ease; /* Reducido para mayor responsividad */
-        }
-
-        .center-arrow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            /* Triángulo Cian/Turquesa Brillante */
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 40px solid #00FFFF; /* Cian/Turquesa Brillante */
-            z-index: 10;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            transition: transform 0.2s ease;
         }
 
         .direction-marker {
@@ -76,7 +61,7 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid #FFD700; /* Amarillo dorado para mejor visibilidad */
+            border-top: 25px solid #FFD700; /* Triángulo dorado */
             z-index: 11;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
             display: none;
@@ -88,65 +73,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            position: relative; /* Para posicionar el switch */
-        }
-
-        /* Estilo para el switch container */
-        .switch-container {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* Estilo para el switch */
-        .switch {
             position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
-            margin-left: 8px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 20px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #4CAF50; /* Verde cuando está activo */
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
         }
 
         .sector-info {
@@ -232,30 +159,20 @@
             <p><strong>Facing Direction:</strong> <span id="facing-direction">--</span></p>
             <button id="lockButton" onclick="toggleLock()">Lock Zone</button>
             <p class="lock-reminder" id="lockReminder">⚠️ Remember to unlock the compass to continue exploring other directions</p>
-            
-            <!-- Switch para cambiar de Bagua con etiqueta dinámica -->
-            <div class="switch-container">
-                <span id="bagua-label">Bagua 1</span>
-                <label class="switch">
-                    <input type="checkbox" id="baguaToggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
         </div>
 
         <div class="compass-container">
-            <!-- Imagen del Bagua (se cambiará dinámicamente) -->
-            <img id="bagua" src="https://i.imgur.com/4btrA5O.png" alt="Bagua Map">
-            <div class="center-arrow" id="centerArrow"></div>
-            <!-- Marcadores de dirección para Bagua 3 -->
-            <div class="direction-marker" id="northMarker" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
-            <div class="direction-marker" id="northeastMarker" style="top: 15px; right: 15px; transform: rotate(45deg);"></div>
-            <div class="direction-marker" id="eastMarker" style="top: 50%; right: -10px; transform: translateY(-50%) rotate(90deg);"></div>
-            <div class="direction-marker" id="southeastMarker" style="bottom: 15px; right: 15px; transform: rotate(135deg);"></div>
-            <div class="direction-marker" id="southMarker" style="bottom: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);"></div>
-            <div class="direction-marker" id="southwestMarker" style="bottom: 15px; left: 15px; transform: rotate(225deg);"></div>
-            <div class="direction-marker" id="westMarker" style="top: 50%; left: -10px; transform: translateY(-50%) rotate(270deg);"></div>
-            <div class="direction-marker" id="northwestMarker" style="top: 15px; left: 15px; transform: rotate(315deg);"></div>
+            <!-- Bagua 3 Image -->
+            <img id="bagua" src="https://i.postimg.cc/RVzPvw7p/map.png" alt="Bagua Map">
+            <!-- Marcadores de dirección (inversos: el triángulo apunta al sur del dispositivo) -->
+            <div class="direction-marker" id="northMarker" style="bottom: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);"></div>
+            <div class="direction-marker" id="northeastMarker" style="bottom: 15px; right: 15px; transform: rotate(225deg);"></div>
+            <div class="direction-marker" id="eastMarker" style="top: 50%; right: -10px; transform: translateY(-50%) rotate(0deg);"></div>
+            <div class="direction-marker" id="southeastMarker" style="top: 15px; right: 15px; transform: rotate(45deg);"></div>
+            <div class="direction-marker" id="southMarker" style="top: -10px; left: 50%; transform: translateX(-50%) rotate(0deg);"></div>
+            <div class="direction-marker" id="southwestMarker" style="top: 15px; left: 15px; transform: rotate(135deg);"></div>
+            <div class="direction-marker" id="westMarker" style="top: 50%; left: -10px; transform: translateY(-50%) rotate(180deg);"></div>
+            <div class="direction-marker" id="northwestMarker" style="bottom: 15px; left: 15px; transform: rotate(315deg);"></div>
         </div>
 
         <div class="sector-info" id="sector-info">
@@ -266,15 +183,8 @@
     <script>
         let isLocked = false;
         let reminderTimeout = null;
-        let useWebKitCompass = false; // Bandera para determinar qué tipo de evento usar
-        let currentBaguaMode = 1; // 1: Bagua 1, 2: Bagua 2, 3: Bagua 3
-
-        // URLs de las imágenes de Bagua
-        const baguaImages = {
-            image1: "https://i.imgur.com/4btrA5O.png", // Imagen actual (por defecto) - Bagua 1
-            image2: "https://i.imgur.com/U7rSJVZ.png",  // Imagen alternativa - Bagua 2
-            image3: "https://i.imgur.com/KWY5Exj.jpeg"  // Nueva imagen - Bagua 3
-        };
+        let useWebKitCompass = false;
+        let currentDirection = '';
 
         const sectorData = {
             'North': {
@@ -415,42 +325,6 @@
             }
         };
 
-        // Función para cambiar la imagen del Bagua y actualizar la etiqueta
-        function toggleBaguaImage() {
-            const baguaImg = document.getElementById('bagua');
-            const toggleCheckbox = document.getElementById('baguaToggle');
-            const label = document.getElementById('bagua-label');
-            const centerArrow = document.getElementById('centerArrow');
-            const directionMarkers = document.querySelectorAll('.direction-marker');
-            
-            // Simular un toggle de 3 estados
-            if (currentBaguaMode === 1) {
-                currentBaguaMode = 2;
-                baguaImg.src = baguaImages.image2;
-                label.textContent = 'Bagua 2';
-                centerArrow.style.display = 'block';
-                directionMarkers.forEach(marker => marker.style.display = 'none');
-            } else if (currentBaguaMode === 2) {
-                currentBaguaMode = 3;
-                baguaImg.src = baguaImages.image3;
-                label.textContent = 'Bagua 3';
-                centerArrow.style.display = 'none';
-                directionMarkers.forEach(marker => marker.style.display = 'block');
-            } else {
-                currentBaguaMode = 1;
-                baguaImg.src = baguaImages.image1;
-                label.textContent = 'Bagua 1';
-                centerArrow.style.display = 'block';
-                directionMarkers.forEach(marker => marker.style.display = 'none');
-            }
-            
-            // Aplicar transformación según el modo
-            if (currentBaguaMode === 3) {
-                // En Bagua 3, solo rotamos los trazos, no el centro
-                baguaImg.style.transform = 'none';
-            }
-        }
-
         function toggleLock() {
             isLocked = !isLocked;
             const lockButton = document.getElementById('lockButton');
@@ -459,8 +333,6 @@
             if (isLocked) {
                 lockButton.textContent = 'Locked Zone';
                 lockButton.classList.add('locked');
-                
-                // Show reminder after 30 seconds
                 reminderTimeout = setTimeout(() => {
                     lockReminder.style.display = 'block';
                 }, 30000);
@@ -468,21 +340,12 @@
                 lockButton.textContent = 'Lock Zone';
                 lockButton.classList.remove('locked');
                 lockReminder.style.display = 'none';
-                
-                // Clear the timeout
-                if (reminderTimeout) {
-                    clearTimeout(reminderTimeout);
-                    reminderTimeout = null;
-                }
+                if (reminderTimeout) clearTimeout(reminderTimeout);
             }
         }
 
-        let currentDirection = '';
-        
         function updateSectorInfo(direction) {
-            // Only update if not locked
             if (isLocked) return;
-            
             currentDirection = direction;
             const data = sectorData[direction];
             if (!data) return;
@@ -498,35 +361,31 @@
         }
 
         function updateCompass(heading) {
-            // Always update the reading
             document.getElementById('compass-reading').textContent = Math.round(heading);
-            
+
+            // Invertimos el heading: el dispositivo apunta al norte → el mapa muestra sur
+            let invertedHeading = (heading + 180) % 360;
             let facingDirection = '';
-            if (heading >= 337.5 || heading < 22.5) facingDirection = 'North';
-            else if (heading >= 22.5 && heading < 67.5) facingDirection = 'Northeast';
-            else if (heading >= 67.5 && heading < 112.5) facingDirection = 'East';
-            else if (heading >= 112.5 && heading < 157.5) facingDirection = 'Southeast';
-            else if (heading >= 157.5 && heading < 202.5) facingDirection = 'South';
-            else if (heading >= 202.5 && heading < 247.5) facingDirection = 'Southwest';
-            else if (heading >= 247.5 && heading < 292.5) facingDirection = 'West';
-            else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
-            
-            // Only update direction display if not locked
+            if (invertedHeading >= 337.5 || invertedHeading < 22.5) facingDirection = 'North';
+            else if (invertedHeading >= 22.5 && invertedHeading < 67.5) facingDirection = 'Northeast';
+            else if (invertedHeading >= 67.5 && invertedHeading < 112.5) facingDirection = 'East';
+            else if (invertedHeading >= 112.5 && invertedHeading < 157.5) facingDirection = 'Southeast';
+            else if (invertedHeading >= 157.5 && invertedHeading < 202.5) facingDirection = 'South';
+            else if (invertedHeading >= 202.5 && invertedHeading < 247.5) facingDirection = 'Southwest';
+            else if (invertedHeading >= 247.5 && invertedHeading < 292.5) facingDirection = 'West';
+            else if (invertedHeading >= 292.5 && invertedHeading < 337.5) facingDirection = 'Northwest';
+
             if (!isLocked) {
                 document.getElementById('facing-direction').textContent = facingDirection;
                 
-                // Aplicar transformación según el modo
-                if (currentBaguaMode === 3) {
-                    // En Bagua 3, solo rotamos los trazos, no el centro
-                    document.getElementById('bagua').style.transform = 'none';
-                    // Mostrar marcador de dirección
-                    hideAllMarkers();
-                    showDirectionMarker(facingDirection);
-                } else {
-                    document.getElementById('bagua').style.transform = `rotate(${-heading}deg)`;
-                }
+                // No rotamos el Bagua
+                document.getElementById('bagua').style.transform = 'none';
                 
-                // Update sector info based on current direction
+                // Mostramos el marcador correcto
+                hideAllMarkers();
+                showDirectionMarker(facingDirection);
+                
+                // Actualizamos la información
                 updateSectorInfo(facingDirection);
             }
         }
@@ -539,24 +398,15 @@
         function showDirectionMarker(direction) {
             const markerId = direction.toLowerCase() + 'Marker';
             const marker = document.getElementById(markerId);
-            if (marker) {
-                marker.style.display = 'block';
-            }
+            if (marker) marker.style.display = 'block';
         }
 
-        // Función mejorada para manejar eventos de orientación
         function handleOrientation(event) {
             let heading = null;
-            
-            // Priorizar webkitCompassHeading si está disponible (más preciso en Safari)
             if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
                 heading = event.webkitCompassHeading;
                 useWebKitCompass = true;
-            } 
-            // Si no, usar alpha (menos preciso, puede requerir calibración)
-            else if (event.alpha !== null) {
-                // Convertir alpha a grados de brújula (0° = Norte, aumenta en sentido horario)
-                // alpha normalmente es 0° cuando el dispositivo apunta al norte magnético
+            } else if (event.alpha !== null) {
                 heading = 360 - event.alpha;
                 if (heading >= 360) heading -= 360;
                 useWebKitCompass = false;
@@ -571,19 +421,13 @@
         }
 
         if ('DeviceOrientationEvent' in window) {
-            // Intentar usar deviceorientationabsolute primero si está disponible
             if ('ondeviceorientationabsolute' in window) {
-                window.addEventListener('deviceorientationabsolute', function(event) {
-                    if (event.absolute === true) {
-                        handleOrientation(event);
-                    }
+                window.addEventListener('deviceorientationabsolute', (event) => {
+                    if (event.absolute === true) handleOrientation(event);
                 });
             }
-            
-            // Escuchar deviceorientation como fallback
             window.addEventListener('deviceorientation', handleOrientation);
-            
-            // Solicitar permiso en dispositivos que lo requieren (iOS 13+)
+
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Enable Compass</button>';
             }
@@ -595,7 +439,7 @@
         function requestCompassPermission() {
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
-                    if (response == 'granted') {
+                    if (response === 'granted') {
                         document.getElementById('status').textContent = 'Compass permission granted. Move device to calibrate.';
                         document.getElementById('status').className = 'loading';
                     } else {
@@ -610,20 +454,18 @@
                 });
         }
 
-        // Agregar control deslizante para escritorio
+        // Soporte para escritorio
         if (!('ontouchstart' in window)) {
-            document.getElementById('status').innerHTML += '<br><br>Desktop: <input type="range" min="0" max="360" value="0" oninput="updateCompass(this.value)">';
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = '0';
+            slider.max = '360';
+            slider.value = '0';
+            slider.oninput = () => updateCompass(parseInt(this.value));
+            document.getElementById('status').appendChild(document.createElement('br'));
+            document.getElementById('status').appendChild(document.createElement('br'));
+            document.getElementById('status').appendChild(slider);
         }
-
-        // Agregar evento al switch
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleCheckbox = document.getElementById('baguaToggle');
-            // Inicializar la etiqueta al cargar la página
-            const label = document.getElementById('bagua-label');
-            label.textContent = 'Bagua 1';
-            
-            toggleCheckbox.addEventListener('change', toggleBaguaImage);
-        });
     </script>
 </body>
 </html>
