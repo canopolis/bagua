@@ -5,19 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lo Pan Bagua Feng Shui Map</title>
 
-    <!-- iOS Homescreen Icons - Todos con la nueva imagen -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/RVzPvw7p/map.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/RVzPvw7p/map.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://i.postimg.cc/RVzPvw7p/map.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/RVzPvw7p/map.png">
+    <!-- iOS Homescreen Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
+
+    <!-- Android: Usa el mismo ícono (puede ser manejado por manifest.json, pero esta es una versión simple) -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://i.postimg.cc/jSs5ykTV/lopan.png">
 
     <!-- Web App Manifest -->
-    <link rel="manifest" href="application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22description%22:%22Lo%20Pan%20Bagua%20Feng%20Shui%20Map%22}">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bagua%20Feng%20Shui%22,%22short_name%22:%22Bagua%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f5%22,%22theme_color%22:%22%238B4513%22,%22icons%22:[{%22src%22:%22https://i.postimg.cc/jSs5ykTV/lopan.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}" />
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Bagua Feng Shui">
+    <meta name="theme-color" content="#8B4513">
 
     <style>
         body {
@@ -61,7 +66,7 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid #FFD700; /* Triángulo dorado */
+            border-top: 25px solid #FFD700; /* Triángulo dorado brillante */
             z-index: 11;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
             display: none;
@@ -162,17 +167,26 @@
         </div>
 
         <div class="compass-container">
-            <!-- Bagua 3 Image -->
-            <img id="bagua" src="https://i.postimg.cc/RVzPvw7p/map.png" alt="Bagua Map">
-            <!-- Marcadores de dirección (inversos: el triángulo apunta al sur del dispositivo) -->
-            <div class="direction-marker" id="northMarker" style="bottom: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);"></div>
-            <div class="direction-marker" id="northeastMarker" style="bottom: 15px; right: 15px; transform: rotate(225deg);"></div>
-            <div class="direction-marker" id="eastMarker" style="top: 50%; right: -10px; transform: translateY(-50%) rotate(0deg);"></div>
-            <div class="direction-marker" id="southeastMarker" style="top: 15px; right: 15px; transform: rotate(45deg);"></div>
-            <div class="direction-marker" id="southMarker" style="top: -10px; left: 50%; transform: translateX(-50%) rotate(0deg);"></div>
-            <div class="direction-marker" id="southwestMarker" style="top: 15px; left: 15px; transform: rotate(135deg);"></div>
-            <div class="direction-marker" id="westMarker" style="top: 50%; left: -10px; transform: translateY(-50%) rotate(180deg);"></div>
-            <div class="direction-marker" id="northwestMarker" style="bottom: 15px; left: 15px; transform: rotate(315deg);"></div>
+            <!-- Bagua Image (Norte arriba, alineado con brújula) -->
+            <img id="bagua" src="https://i.postimg.cc/jSs5ykTV/lopan.png" alt="Bagua Map">
+
+            <!-- Marcadores direccionales (apuntan hacia el centro) -->
+            <!-- North: arriba -->
+            <div class="direction-marker" id="northMarker" style="top: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);"></div>
+            <!-- Northeast -->
+            <div class="direction-marker" id="northeastMarker" style="top: 15px; right: 15px; transform: rotate(225deg);"></div>
+            <!-- East -->
+            <div class="direction-marker" id="eastMarker" style="top: 50%; right: -10px; transform: translateY(-50%) rotate(270deg);"></div>
+            <!-- Southeast -->
+            <div class="direction-marker" id="southeastMarker" style="bottom: 15px; right: 15px; transform: rotate(135deg);"></div>
+            <!-- South -->
+            <div class="direction-marker" id="southMarker" style="bottom: -10px; left: 50%; transform: translateX(-50%) rotate(0deg);"></div>
+            <!-- Southwest -->
+            <div class="direction-marker" id="southwestMarker" style="bottom: 15px; left: 15px; transform: rotate(45deg);"></div>
+            <!-- West -->
+            <div class="direction-marker" id="westMarker" style="top: 50%; left: -10px; transform: translateY(-50%) rotate(90deg);"></div>
+            <!-- Northwest -->
+            <div class="direction-marker" id="northwestMarker" style="top: 15px; left: 15px; transform: rotate(315deg);"></div>
         </div>
 
         <div class="sector-info" id="sector-info">
@@ -363,29 +377,27 @@
         function updateCompass(heading) {
             document.getElementById('compass-reading').textContent = Math.round(heading);
 
-            // Invertimos el heading: el dispositivo apunta al norte → el mapa muestra sur
-            let invertedHeading = (heading + 180) % 360;
             let facingDirection = '';
-            if (invertedHeading >= 337.5 || invertedHeading < 22.5) facingDirection = 'North';
-            else if (invertedHeading >= 22.5 && invertedHeading < 67.5) facingDirection = 'Northeast';
-            else if (invertedHeading >= 67.5 && invertedHeading < 112.5) facingDirection = 'East';
-            else if (invertedHeading >= 112.5 && invertedHeading < 157.5) facingDirection = 'Southeast';
-            else if (invertedHeading >= 157.5 && invertedHeading < 202.5) facingDirection = 'South';
-            else if (invertedHeading >= 202.5 && invertedHeading < 247.5) facingDirection = 'Southwest';
-            else if (invertedHeading >= 247.5 && invertedHeading < 292.5) facingDirection = 'West';
-            else if (invertedHeading >= 292.5 && invertedHeading < 337.5) facingDirection = 'Northwest';
+            if (heading >= 337.5 || heading < 22.5) facingDirection = 'North';
+            else if (heading >= 22.5 && heading < 67.5) facingDirection = 'Northeast';
+            else if (heading >= 67.5 && heading < 112.5) facingDirection = 'East';
+            else if (heading >= 112.5 && heading < 157.5) facingDirection = 'Southeast';
+            else if (heading >= 157.5 && heading < 202.5) facingDirection = 'South';
+            else if (heading >= 202.5 && heading < 247.5) facingDirection = 'Southwest';
+            else if (heading >= 247.5 && heading < 292.5) facingDirection = 'West';
+            else if (heading >= 292.5 && heading < 337.5) facingDirection = 'Northwest';
 
             if (!isLocked) {
                 document.getElementById('facing-direction').textContent = facingDirection;
                 
-                // No rotamos el Bagua
+                // No rotamos el Bagua (la imagen ya está alineada con el norte)
                 document.getElementById('bagua').style.transform = 'none';
                 
                 // Mostramos el marcador correcto
                 hideAllMarkers();
                 showDirectionMarker(facingDirection);
                 
-                // Actualizamos la información
+                // Actualizamos la información del sector
                 updateSectorInfo(facingDirection);
             }
         }
