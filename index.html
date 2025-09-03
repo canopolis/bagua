@@ -6,17 +6,17 @@
     <title>Lo Pan Bagua Feng Shui Map</title>
 
     <!-- Favicon base -->
-    <link rel="icon" href="https://i.postimg.cc/d3ZvKpyf/pakua.png" type="image/png">
+    <link rel="icon" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
 
     <!-- iOS Homescreen Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
 
-    <!-- Android Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="https://i.postimg.cc/d3ZvKpyf/pakua.png">
+    <!-- Android Icons (PWA) -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://i.postimg.cc/VLdNJxBd/pakua.png">
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="application/manifest+json,{
@@ -112,62 +112,6 @@
             text-align: left;
         }
 
-        .switch-container {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            color: #555;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-            margin-left: 8px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4CAF50; /* Verde para ENG */
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #2196F3; /* Azul para ES */
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
         .sector-info {
             background: white;
             padding: 20px;
@@ -252,23 +196,14 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="title">Lo Pan Bagua Feng Shui Map</h1>
+        <h1>Lo Pan Bagua Feng Shui Map</h1>
 
         <div class="compass-info">
             <p class="loading" id="status">Initializing compass...</p>
             <p><strong>Compass Direction:</strong> <span id="compass-reading">--</span>°</p>
             <p><strong>Facing Direction:</strong> <span id="facing-direction">--</span></p>
-            <button id="lockButton">Lock Zone</button>
+            <button id="lockButton" onclick="toggleLock()">Lock Zone</button>
             <p class="lock-reminder" id="lockReminder">⚠️ Remember to unlock the compass to continue exploring other directions</p>
-            
-            <!-- Switch ENG/ES -->
-            <div class="switch-container">
-                <span id="langLabel">ENG-ES</span>
-                <label class="switch">
-                    <input type="checkbox" id="langToggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
         </div>
 
         <div class="compass-container">
@@ -294,370 +229,162 @@
     <script>
         let isLocked = false;
         let reminderTimeout = null;
-        let isSpanish = false; // false = ENG, true = ES
-
-        // Textos en ambos idiomas
-        const texts = {
-            en: {
-                title: 'Lo Pan Bagua Feng Shui Map',
-                statusInit: 'Initializing compass...',
-                statusGranted: 'Compass permission granted. Move device to calibrate.',
-                statusDenied: 'Compass permission denied',
-                statusError: 'Error requesting compass permission',
-                statusNoSupport: 'Compass not supported',
-                compassDir: 'Compass Direction',
-                facingDir: 'Facing Direction',
-                lockButton: 'Lock Zone',
-                lockButtonLocked: 'Locked Zone',
-                lockReminder: '⚠️ Remember to unlock the compass to continue exploring other directions',
-                defaultText: 'Point your device to a direction to see specific feng shui recommendations'
-            },
-            es: {
-                title: 'Mapa Lo Pan Bagua Feng Shui',
-                statusInit: 'Inicializando brújula...',
-                statusGranted: 'Permiso de brújula concedido. Mueva el dispositivo para calibrar.',
-                statusDenied: 'Permiso de brújula denegado',
-                statusError: 'Error al solicitar permiso de brújula',
-                statusNoSupport: 'Brújula no soportada',
-                compassDir: 'Dirección de la Brújula',
-                facingDir: 'Dirección que enfrenta',
-                lockButton: 'Bloquear Zona',
-                lockButtonLocked: 'Zona Bloqueada',
-                lockReminder: '⚠️ Recuerda desbloquear la brújula para explorar otras direcciones',
-                defaultText: 'Apunta tu dispositivo a una dirección para ver recomendaciones específicas de feng shui'
-            }
-        };
-
-        // Datos de sectores en ambos idiomas
-        const sectorData = {
-            en: {
-                'North': {
-                    element: 'Water',
-                    area: 'Career & Life Path',
-                    cures: [
-                        'Add water features like fountains or aquariums',
-                        'Use black or dark blue decor',
-                        'Display images of water scenes',
-                        'Add wavy or curved shapes',
-                        'Use mirrors to represent water',
-                        'Keep this area clean and clutter-free',
-                        'Add career-related symbols or awards',
-                        'Include metal elements (white, gray, metallic colors) as Metal nourishes Water in the productive cycle',
-                        'Use Black Tourmaline or Obsidian in pyramid shape for protection and grounding',
-                        'Place Clear Quartz points facing inward to amplify career energy',
-                        'Use Amethyst clusters for wisdom and clarity in career decisions'
-                    ]
-                },
-                'Northeast': {
-                    element: 'Earth',
-                    area: 'Knowledge & Education',
-                    cures: [
-                        'Place crystals or stones',
-                        'Add ceramic or pottery items',
-                        'Use earth tone colors (beige, yellow, brown)',
-                        'Create a study or meditation area',
-                        'Display books and educational materials',
-                        'Add mountain imagery',
-                        'Use square shapes and patterns',
-                        'Include fire elements (candles, red accents) as Fire nourishes Earth in the productive cycle',
-                        'Use Citrine or Yellow Jasper in cube shape to enhance learning and memory',
-                        'Place Tiger Eye stones for focus and mental clarity',
-                        'Use Carnelian in pyramid shape to stimulate creativity and knowledge'
-                    ]
-                },
-                'East': {
-                    element: 'Wood',
-                    area: 'Family & Health',
-                    cures: [
-                        'Add healthy plants or flowers',
-                        'Use wooden furniture or decor',
-                        'Display family photos in wooden frames',
-                        'Use green and brown colors',
-                        'Place bamboo or lucky bamboo',
-                        'Use rectangular shapes',
-                        'Keep this area vibrant and alive',
-                        'Include water elements (fountains, blue colors) as Water nourishes Wood in the productive cycle',
-                        'Use Green Aventurine in wand or palm stone form for family harmony',
-                        'Place Jade stones for health and longevity',
-                        'Use Emerald chips in bowl for family unity and growth'
-                    ]
-                },
-                'Southeast': {
-                    element: 'Wood',
-                    area: 'Wealth & Prosperity',
-                    cures: [
-                        'Place a money tree or jade plant',
-                        'Add a small fountain (flowing inward)',
-                        'Use purple, gold, or green accents',
-                        'Display symbols of abundance',
-                        'Keep a bowl of coins or crystals',
-                        'Add wind chimes for energy flow',
-                        'Ensure good lighting in this area',
-                        'Include water elements (aquarium, water imagery) as Water nourishes Wood in the productive cycle',
-                        'Use Citrine points or clusters for wealth attraction',
-                        'Place Pyrite cubes for financial stability and abundance',
-                        'Use Peridot in heart shape for prosperity and growth'
-                    ]
-                },
-                'South': {
-                    element: 'Fire',
-                    area: 'Fame & Recognition',
-                    cures: [
-                        'Add candles or bright lighting',
-                        'Use red or orange decor',
-                        'Display awards and certificates',
-                        'Add triangular or pointed shapes',
-                        'Place red flowers or artwork',
-                        'Display your achievements',
-                        'Add a fireplace or red lamp',
-                        'Include wood elements (plants, green colors) as Wood nourishes Fire in the productive cycle',
-                        'Use Red Jasper or Carnelian in pointed shapes for recognition',
-                        'Place Sunstone for leadership and personal power',
-                        'Use Ruby chips in bowl for fame and success'
-                    ]
-                },
-                'Southwest': {
-                    element: 'Earth',
-                    area: 'Love & Relationships',
-                    cures: [
-                        'Use pairs of objects (2 candles, 2 pillows)',
-                        'Add rose quartz or pink crystals',
-                        'Display romantic artwork or photos',
-                        'Use pink, red, or earth tones',
-                        'Place fresh flowers (especially peonies)',
-                        'Add ceramic or pottery pairs',
-                        'Create a cozy seating area for two',
-                        'Include fire elements (candles, pink/red colors) as Fire nourishes Earth in the productive cycle',
-                        'Use Rose Quartz spheres for love and relationships',
-                        'Place Pink Tourmaline hearts for emotional healing',
-                        'Use Rhodochrosite in heart shape for deep connections'
-                    ]
-                },
-                'West': {
-                    element: 'Metal',
-                    area: 'Children & Creativity',
-                    cures: [
-                        'Add metal decor or sculptures',
-                        'Use white or metallic colors',
-                        'Display children\'s artwork or photos',
-                        'Create a creative workspace',
-                        'Add round or circular shapes',
-                        'Place bells or chimes',
-                        'Keep playful or whimsical items',
-                        'Include earth elements (crystals, yellow colors) as Earth nourishes Metal in the productive cycle',
-                        'Use White Howlite or Selenite in circular shapes for creativity',
-                        'Place Hematite spheres for focus and concentration',
-                        'Use Moonstone in crescent shape for intuition and inspiration'
-                    ]
-                },
-                'Northwest': {
-                    element: 'Metal',
-                    area: 'Helpful People & Travel',
-                    cures: [
-                        'Add metal objects or decor',
-                        'Display travel photos or maps',
-                        'Use white, gray, or metallic colors',
-                        'Place religious or spiritual items',
-                        'Add images of mentors or guides',
-                        'Use circular or dome shapes',
-                        'Display globe or travel souvenirs',
-                        'Include earth elements (stones, ceramic items) as Earth nourishes Metal in the productive cycle',
-                        'Use Clear Quartz or Amethyst in sphere shape for spiritual guidance',
-                        'Place Black Onyx for protection during travels',
-                        'Use Smoky Quartz points for grounding and support from mentors'
-                    ]
-                }
-            },
-            es: {
-                'North': {
-                    element: 'Agua',
-                    area: 'Carrera y Camino de Vida',
-                    cures: [
-                        'Agrega elementos de agua como fuentes o acuarios',
-                        'Usa decoración negra o azul oscuro',
-                        'Muestra imágenes de escenas acuáticas',
-                        'Agrega formas onduladas o curvas',
-                        'Usa espejos para representar el agua',
-                        'Mantén esta zona limpia y libre de desorden',
-                        'Agrega símbolos o premios relacionados con tu carrera',
-                        'Incluye elementos de metal (blanco, gris, colores metálicos) ya que el Metal nutre al Agua en el ciclo productivo',
-                        'Usa Turmalina Negra u Obsidiana en forma de pirámide para protección y arraigo',
-                        'Coloca puntos de Cuarzo Transparente mirando hacia adentro para amplificar la energía de la carrera',
-                        'Usa racimos de Amatista para sabiduría y claridad en decisiones laborales'
-                    ]
-                },
-                'Northeast': {
-                    element: 'Tierra',
-                    area: 'Conocimiento y Educación',
-                    cures: [
-                        'Coloca cristales o piedras',
-                        'Agrega objetos de cerámica o alfarería',
-                        'Usa colores tierra (beige, amarillo, marrón)',
-                        'Crea un área de estudio o meditación',
-                        'Muestra libros y material educativo',
-                        'Agrega imágenes de montañas',
-                        'Usa formas y patrones cuadrados',
-                        'Incluye elementos de fuego (velas, acentos rojos) ya que el Fuego nutre a la Tierra en el ciclo productivo',
-                        'Usa Cuarzo Citrino o Jaspe Amarillo en forma de cubo para mejorar el aprendizaje y la memoria',
-                        'Coloca piedras de Ojo de Tigre para enfoque y claridad mental',
-                        'Usa Cornalina en forma de pirámide para estimular la creatividad y el conocimiento'
-                    ]
-                },
-                'East': {
-                    element: 'Madera',
-                    area: 'Familia y Salud',
-                    cures: [
-                        'Agrega plantas sanas o flores',
-                        'Usa muebles o decoración de madera',
-                        'Muestra fotos familiares en marcos de madera',
-                        'Usa colores verdes y marrones',
-                        'Coloca bambú o bambú de la suerte',
-                        'Usa formas rectangulares',
-                        'Mantén esta zona vibrante y viva',
-                        'Incluye elementos de agua (fuentes, colores azules) ya que el Agua nutre a la Madera en el ciclo productivo',
-                        'Usa Aventurina Verde en forma de varita o piedra de bolsillo para armonía familiar',
-                        'Coloca piedras de Jade para salud y longevidad',
-                        'Usa trozos de Esmeralda en un bol para unidad y crecimiento familiar'
-                    ]
-                },
-                'Southeast': {
-                    element: 'Madera',
-                    area: 'Riqueza y Prosperidad',
-                    cures: [
-                        'Coloca un árbol de la fortuna o planta de jade',
-                        'Agrega una pequeña fuente (con flujo hacia adentro)',
-                        'Usa acentos morados, dorados o verdes',
-                        'Muestra símbolos de abundancia',
-                        'Mantén un bol de monedas o cristales',
-                        'Agrega carillones para flujo de energía',
-                        'Asegúrate de tener buena iluminación en esta zona',
-                        'Incluye elementos de agua (acuarios, imágenes de agua) ya que el Agua nutre a la Madera en el ciclo productivo',
-                        'Usa puntos o racimos de Citrino para atraer riqueza',
-                        'Coloca cubos de Piritas para estabilidad financiera y abundancia',
-                        'Usa Peridoto en forma de corazón para prosperidad y crecimiento'
-                    ]
-                },
-                'South': {
-                    element: 'Fuego',
-                    area: 'Fama y Reconocimiento',
-                    cures: [
-                        'Agrega velas o iluminación brillante',
-                        'Usa decoración roja u naranja',
-                        'Muestra premios y certificados',
-                        'Agrega formas triangulares o puntiagudas',
-                        'Coloca flores rojas u obras de arte',
-                        'Muestra tus logros',
-                        'Agrega una chimenea o lámpara roja',
-                        'Incluye elementos de madera (plantas, colores verdes) ya que la Madera nutre al Fuego en el ciclo productivo',
-                        'Usa Jaspe Rojo o Cornalina en formas puntiagudas para reconocimiento',
-                        'Coloca Piedra de Sol para liderazgo y poder personal',
-                        'Usa trozos de Rubí en un bol para fama y éxito'
-                    ]
-                },
-                'Southwest': {
-                    element: 'Tierra',
-                    area: 'Amor y Relaciones',
-                    cures: [
-                        'Usa objetos en pareja (2 velas, 2 almohadas)',
-                        'Agrega cuarzo rosa o cristales rosados',
-                        'Muestra arte romántico o fotos',
-                        'Usa tonos rosados, rojos o tierra',
-                        'Coloca flores frescas (especialmente peonías)',
-                        'Agrega pares de cerámica o alfarería',
-                        'Crea un área acogedora para dos personas',
-                        'Incluye elementos de fuego (velas, colores rosados/rojos) ya que el Fuego nutre a la Tierra en el ciclo productivo',
-                        'Usa esferas de Cuarzo Rosa para amor y relaciones',
-                        'Coloca corazones de Turmalina Rosa para sanación emocional',
-                        'Usa Rodocrosita en forma de corazón para conexiones profundas'
-                    ]
-                },
-                'West': {
-                    element: 'Metal',
-                    area: 'Niños y Creatividad',
-                    cures: [
-                        'Agrega decoración o esculturas de metal',
-                        'Usa colores blancos o metálicos',
-                        'Muestra arte o fotos de tus hijos',
-                        'Crea un espacio creativo',
-                        'Agrega formas redondas o circulares',
-                        'Coloca campanas o carillones',
-                        'Mantén objetos lúdicos o divertidos',
-                        'Incluye elementos de tierra (cristales, colores amarillos) ya que la Tierra nutre al Metal en el ciclo productivo',
-                        'Usa Howlita Blanca o Selenita en formas circulares para creatividad',
-                        'Coloca esferas de Hematita para enfoque y concentración',
-                        'Usa Piedra de Luna en forma de media luna para intuición e inspiración'
-                    ]
-                },
-                'Northwest': {
-                    element: 'Metal',
-                    area: 'Personas de Ayuda y Viajes',
-                    cures: [
-                        'Agrega objetos o decoración de metal',
-                        'Muestra fotos de viajes o mapas',
-                        'Usa colores blancos, grises o metálicos',
-                        'Coloca objetos religiosos o espirituales',
-                        'Agrega imágenes de mentores o guías',
-                        'Usa formas circulares o cúpulas',
-                        'Muestra globo terráqueo o recuerdos de viaje',
-                        'Incluye elementos de tierra (piedras, objetos cerámicos) ya que la Tierra nutre al Metal en el ciclo productivo',
-                        'Usa Cuarzo Transparente o Amatista en forma de esfera para guía espiritual',
-                        'Coloca Onyx Negro para protección durante los viajes',
-                        'Usa puntos de Cuarzo Ahumado para arraigo y apoyo de mentores'
-                    ]
-                }
-            }
-        };
-
-        // Función para actualizar textos según idioma
-        function updateLanguage() {
-            const lang = isSpanish ? 'es' : 'en';
-            const t = texts[lang];
-
-            document.getElementById('title').textContent = t.title;
-            document.getElementById('status').textContent = document.getElementById('status').classList.contains('error') ? 
-                t.statusDenied : (document.getElementById('status').textContent.includes('active') ? 
-                document.getElementById('status').textContent : t.statusInit);
-            document.querySelector('#compass-info strong:nth-of-type(1)').textContent = t.compassDir + ':';
-            document.querySelector('#compass-info strong:nth-of-type(2)').textContent = t.facingDir + ':';
-
-            const lockButton = document.getElementById('lockButton');
-            lockButton.textContent = isLocked ? t.lockButtonLocked : t.lockButton;
-
-            document.getElementById('lockReminder').textContent = t.lockReminder;
-
-            // Cambiar imagen del Bagua
-            const baguaImg = document.getElementById('bagua');
-            baguaImg.src = isSpanish ? 
-                'https://i.postimg.cc/gjSfZwQj/1pakua-translated.png' : 
-                'https://i.postimg.cc/VLdNJxBd/pakua.png'; // Nueva imagen en inglés
-
-            // Actualizar sector-info si hay dirección activa
-            if (currentDirection) {
-                updateSectorInfo(currentDirection);
-            }
-        }
-
-        // Toggle de idioma
-        document.getElementById('langToggle').addEventListener('change', function () {
-            isSpanish = this.checked;
-            updateLanguage();
-        });
-
+        let useWebKitCompass = false;
         let currentDirection = '';
+
+        const sectorData = {
+            'North': {
+                element: 'Water',
+                area: 'Career & Life Path',
+                cures: [
+                    'Add water features like fountains or aquariums',
+                    'Use black or dark blue decor',
+                    'Display images of water scenes',
+                    'Add wavy or curved shapes',
+                    'Use mirrors to represent water',
+                    'Keep this area clean and clutter-free',
+                    'Add career-related symbols or awards',
+                    'Include metal elements (white, gray, metallic colors) as Metal nourishes Water in the productive cycle',
+                    'Use Black Tourmaline or Obsidian in pyramid shape for protection and grounding',
+                    'Place Clear Quartz points facing inward to amplify career energy',
+                    'Use Amethyst clusters for wisdom and clarity in career decisions'
+                ]
+            },
+            'Northeast': {
+                element: 'Earth',
+                area: 'Knowledge & Education',
+                cures: [
+                    'Place crystals or stones',
+                    'Add ceramic or pottery items',
+                    'Use earth tone colors (beige, yellow, brown)',
+                    'Create a study or meditation area',
+                    'Display books and educational materials',
+                    'Add mountain imagery',
+                    'Use square shapes and patterns',
+                    'Include fire elements (candles, red accents) as Fire nourishes Earth in the productive cycle',
+                    'Use Citrine or Yellow Jasper in cube shape to enhance learning and memory',
+                    'Place Tiger Eye stones for focus and mental clarity',
+                    'Use Carnelian in pyramid shape to stimulate creativity and knowledge'
+                ]
+            },
+            'East': {
+                element: 'Wood',
+                area: 'Family & Health',
+                cures: [
+                    'Add healthy plants or flowers',
+                    'Use wooden furniture or decor',
+                    'Display family photos in wooden frames',
+                    'Use green and brown colors',
+                    'Place bamboo or lucky bamboo',
+                    'Use rectangular shapes',
+                    'Keep this area vibrant and alive',
+                    'Include water elements (fountains, blue colors) as Water nourishes Wood in the productive cycle',
+                    'Use Green Aventurine in wand or palm stone form for family harmony',
+                    'Place Jade stones for health and longevity',
+                    'Use Emerald chips in bowl for family unity and growth'
+                ]
+            },
+            'Southeast': {
+                element: 'Wood',
+                area: 'Wealth & Prosperity',
+                cures: [
+                    'Place a money tree or jade plant',
+                    'Add a small fountain (flowing inward)',
+                    'Use purple, gold, or green accents',
+                    'Display symbols of abundance',
+                    'Keep a bowl of coins or crystals',
+                    'Add wind chimes for energy flow',
+                    'Ensure good lighting in this area',
+                    'Include water elements (aquarium, water imagery) as Water nourishes Wood in the productive cycle',
+                    'Use Citrine points or clusters for wealth attraction',
+                    'Place Pyrite cubes for financial stability and abundance',
+                    'Use Peridot in heart shape for prosperity and growth'
+                ]
+            },
+            'South': {
+                element: 'Fire',
+                area: 'Fame & Recognition',
+                cures: [
+                    'Add candles or bright lighting',
+                    'Use red or orange decor',
+                    'Display awards and certificates',
+                    'Add triangular or pointed shapes',
+                    'Place red flowers or artwork',
+                    'Display your achievements',
+                    'Add a fireplace or red lamp',
+                    'Include wood elements (plants, green colors) as Wood nourishes Fire in the productive cycle',
+                    'Use Red Jasper or Carnelian in pointed shapes for recognition',
+                    'Place Sunstone for leadership and personal power',
+                    'Use Ruby chips in bowl for fame and success'
+                ]
+            },
+            'Southwest': {
+                element: 'Earth',
+                area: 'Love & Relationships',
+                cures: [
+                    'Use pairs of objects (2 candles, 2 pillows)',
+                    'Add rose quartz or pink crystals',
+                    'Display romantic artwork or photos',
+                    'Use pink, red, or earth tones',
+                    'Place fresh flowers (especially peonies)',
+                    'Add ceramic or pottery pairs',
+                    'Create a cozy seating area for two',
+                    'Include fire elements (candles, pink/red colors) as Fire nourishes Earth in the productive cycle',
+                    'Use Rose Quartz spheres for love and relationships',
+                    'Place Pink Tourmaline hearts for emotional healing',
+                    'Use Rhodochrosite in heart shape for deep connections'
+                ]
+            },
+            'West': {
+                element: 'Metal',
+                area: 'Children & Creativity',
+                cures: [
+                    'Add metal decor or sculptures',
+                    'Use white or metallic colors',
+                    'Display children\'s artwork or photos',
+                    'Create a creative workspace',
+                    'Add round or circular shapes',
+                    'Place bells or chimes',
+                    'Keep playful or whimsical items',
+                    'Include earth elements (crystals, yellow colors) as Earth nourishes Metal in the productive cycle',
+                    'Use White Howlite or Selenite in circular shapes for creativity',
+                    'Place Hematite spheres for focus and concentration',
+                    'Use Moonstone in crescent shape for intuition and inspiration'
+                ]
+            },
+            'Northwest': {
+                element: 'Metal',
+                area: 'Helpful People & Travel',
+                cures: [
+                    'Add metal objects or decor',
+                    'Display travel photos or maps',
+                    'Use white, gray, or metallic colors',
+                    'Place religious or spiritual items',
+                    'Add images of mentors or guides',
+                    'Use circular or dome shapes',
+                    'Display globe or travel souvenirs',
+                    'Include earth elements (stones, ceramic items) as Earth nourishes Metal in the productive cycle',
+                    'Use Clear Quartz or Amethyst in sphere shape for spiritual guidance',
+                    'Place Black Onyx for protection during travels',
+                    'Use Smoky Quartz points for grounding and support from mentors'
+                ]
+            }
+        };
 
         function toggleLock() {
             isLocked = !isLocked;
-            const t = texts[isSpanish ? 'es' : 'en'];
             const lockButton = document.getElementById('lockButton');
-            lockButton.textContent = isLocked ? t.lockButtonLocked : t.lockButton;
-
             const lockReminder = document.getElementById('lockReminder');
+            
             if (isLocked) {
-                lockReminder.style.display = 'block';
+                lockButton.textContent = 'Locked Zone';
+                lockButton.classList.add('locked');
                 reminderTimeout = setTimeout(() => {
                     lockReminder.style.display = 'block';
                 }, 30000);
             } else {
+                lockButton.textContent = 'Lock Zone';
+                lockButton.classList.remove('locked');
                 lockReminder.style.display = 'none';
                 if (reminderTimeout) clearTimeout(reminderTimeout);
             }
@@ -666,14 +393,12 @@
         function updateSectorInfo(direction) {
             if (isLocked) return;
             currentDirection = direction;
-            const lang = isSpanish ? 'es' : 'en';
-            const data = sectorData[lang][direction];
+            const data = sectorData[direction];
             if (!data) return;
-
-            const t = texts[lang];
+            
             const infoDiv = document.getElementById('sector-info');
             infoDiv.innerHTML = `
-                <h2>${direction} - ${data.element} ${lang === 'es' ? 'Elemento' : 'Element'}</h2>
+                <h2>${direction} - ${data.element} Element</h2>
                 <h3>${data.area}</h3>
                 <ul class="cure-list">
                     ${data.cures.map(cure => `<li>${cure}</li>`).join('')}
@@ -718,14 +443,17 @@
             let heading = null;
             if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
                 heading = event.webkitCompassHeading;
+                useWebKitCompass = true;
             } else if (event.alpha !== null) {
                 heading = 360 - event.alpha;
                 if (heading >= 360) heading -= 360;
+                useWebKitCompass = false;
             }
             
             if (heading !== null) {
                 updateCompass(heading);
-                document.getElementById('status').textContent = 'Compass active (WebKit)';
+                document.getElementById('status').textContent = useWebKitCompass ? 
+                    'Compass active (WebKit)' : 'Compass active (Alpha)';
                 document.getElementById('status').className = '';
             }
         }
@@ -739,11 +467,10 @@
             window.addEventListener('deviceorientation', handleOrientation);
 
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                document.getElementById('status').innerHTML = `<button onclick="requestCompassPermission()">Enable Compass</button>`;
+                document.getElementById('status').innerHTML = '<button onclick="requestCompassPermission()">Enable Compass</button>';
             }
         } else {
-            const t = texts[isSpanish ? 'es' : 'en'];
-            document.getElementById('status').textContent = t.statusNoSupport;
+            document.getElementById('status').textContent = 'Compass not supported';
             document.getElementById('status').className = 'error';
         }
 
@@ -751,18 +478,16 @@
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
                     if (response === 'granted') {
-                        const t = texts[isSpanish ? 'es' : 'en'];
-                        document.getElementById('status').textContent = t.statusGranted;
+                        document.getElementById('status').textContent = 'Compass permission granted. Move device to calibrate.';
                         document.getElementById('status').className = 'loading';
                     } else {
-                        const t = texts[isSpanish ? 'es' : 'en'];
-                        document.getElementById('status').textContent = t.statusDenied;
+                        document.getElementById('status').textContent = 'Compass permission denied';
                         document.getElementById('status').className = 'error';
                     }
                 })
                 .catch(error => {
-                    const t = texts[isSpanish ? 'es' : 'en'];
-                    document.getElementById('status').textContent = t.statusError;
+                    console.error('Error requesting compass permission:', error);
+                    document.getElementById('status').textContent = 'Error requesting compass permission';
                     document.getElementById('status').className = 'error';
                 });
         }
@@ -779,9 +504,6 @@
             document.getElementById('status').appendChild(document.createElement('br'));
             document.getElementById('status').appendChild(slider);
         }
-
-        // Inicializar idioma en ENG
-        updateLanguage();
     </script>
 </body>
 </html>
